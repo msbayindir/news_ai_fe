@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { API_URL } from './config';
+import axios from "axios";
+import { API_URL } from "./config";
 
 const api = axios.create({
   baseURL: `${API_URL}/api`,
   headers: {
-    'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -106,9 +106,9 @@ export const articleApi = {
     // Convert categoryNames array to comma-separated string for query param
     const queryParams = {
       ...params,
-      categoryNames: params?.categoryNames?.join(',')
+      categoryNames: params?.categoryNames?.join(","),
     };
-    const response = await api.get('/articles', { params: queryParams });
+    const response = await api.get("/articles", { params: queryParams });
     return response.data;
   },
 
@@ -118,28 +118,30 @@ export const articleApi = {
   },
 
   getLatestArticles: async (limit?: number) => {
-    const response = await api.get('/articles/latest', { params: { limit } });
+    const response = await api.get("/articles/latest", { params: { limit } });
     // Ensure the response format matches the expected structure
     return {
       data: {
         articles: response.data.data || response.data,
-        pagination: null
-      }
+        pagination: null,
+      },
     };
   },
 
   getTrendingArticles: async (limit?: number) => {
-    const response = await api.get('/articles/trending', { params: { limit } });
+    const response = await api.get("/articles/trending", { params: { limit } });
     return response.data;
   },
 
   searchArticles: async (query: string, limit?: number) => {
-    const response = await api.get('/articles/search', { params: { q: query, limit } });
+    const response = await api.get("/articles/search", {
+      params: { q: query, limit },
+    });
     return response.data;
   },
 
   getStatistics: async () => {
-    const response = await api.get('/articles/statistics');
+    const response = await api.get("/articles/statistics");
     return response.data;
   },
 };
@@ -147,12 +149,12 @@ export const articleApi = {
 // Feed APIs
 export const feedApi = {
   getFeedSources: async () => {
-    const response = await api.get('/feeds');
+    const response = await api.get("/feeds");
     return response.data;
   },
 
   addFeedSource: async (data: { name: string; url: string }) => {
-    const response = await api.post('/feeds', data);
+    const response = await api.post("/feeds", data);
     return response.data;
   },
 
@@ -167,7 +169,7 @@ export const feedApi = {
   },
 
   checkFeeds: async () => {
-    const response = await api.post('/feeds/check');
+    const response = await api.post("/feeds/check");
     return response.data;
   },
 
@@ -184,22 +186,26 @@ export const geminiApi = {
     endDate: string;
     prompt?: string;
   }) => {
-    const response = await api.post('/gemini/summarize', data);
+    const response = await api.post("/gemini/summarize", data);
     return response.data;
   },
 
   searchWeb: async (query: string, maxDaysOld: number = 7) => {
-    const response = await api.post('/gemini/search-web', { query, maxDaysOld });
+    const response = await api.post("/gemini/search", { query, maxDaysOld });
     return response.data;
   },
 
   getSummaries: async (page?: number, limit?: number) => {
-    const response = await api.get('/gemini/summaries', { params: { page, limit } });
+    const response = await api.get("/gemini/summaries", {
+      params: { page, limit },
+    });
     return response.data;
   },
 
   getSearchHistory: async (page?: number, limit?: number) => {
-    const response = await api.get('/gemini/search-history', { params: { page, limit } });
+    const response = await api.get("/gemini/search-history", {
+      params: { page, limit },
+    });
     return response.data;
   },
 };
