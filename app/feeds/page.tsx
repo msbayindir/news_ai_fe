@@ -95,14 +95,14 @@ export default function FeedsPage() {
               value={newFeedName}
               onChange={(e) => setNewFeedName(e.target.value)}
               placeholder="Kaynak adı (örn: Hürriyet)"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium"
             />
             <input
               type="url"
               value={newFeedUrl}
               onChange={(e) => setNewFeedUrl(e.target.value)}
               placeholder="RSS URL (örn: https://site.com/rss)"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium"
             />
           </div>
           <button

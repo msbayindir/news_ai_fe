@@ -9,15 +9,13 @@ import { Loader2, Filter, RefreshCw } from 'lucide-react';
 export default function Home() {
   const [page, setPage] = useState(1);
   const [selectedSource, setSelectedSource] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['articles', page, selectedSource, selectedCategory],
+    queryKey: ['articles', page, selectedSource],
     queryFn: () => articleApi.getArticles({
       page,
       limit: 12,
       sourceId: selectedSource || undefined,
-      categoryId: selectedCategory || undefined,
     }),
   });
 
@@ -48,26 +46,22 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8">
       {/* Statistics */}
       {statsData?.data && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
             <div className="text-2xl font-bold text-blue-600">{statsData.data.totalArticles}</div>
             <div className="text-sm text-gray-600">Toplam Haber</div>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
             <div className="text-2xl font-bold text-green-600">{statsData.data.articlesLast24h}</div>
             <div className="text-sm text-gray-600">Son 24 Saat</div>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
             <div className="text-2xl font-bold text-purple-600">{statsData.data.articlesLast7days}</div>
             <div className="text-sm text-gray-600">Son 7 Gün</div>
           </div>
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
             <div className="text-2xl font-bold text-orange-600">{statsData.data.totalSources}</div>
             <div className="text-sm text-gray-600">Haber Kaynağı</div>
-          </div>
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="text-2xl font-bold text-indigo-600">{statsData.data.totalCategories}</div>
-            <div className="text-sm text-gray-600">Kategori</div>
           </div>
         </div>
       )}

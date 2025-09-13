@@ -64,7 +64,7 @@ export default function ArticleDetailPage() {
           )}
 
           <div className="p-8">
-            <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+            <h1 className="text-3xl font-bold mb-4 text-black">{article.title}</h1>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
               {article.pubDate && (

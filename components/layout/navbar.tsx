@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/trending', label: 'Trendler', icon: TrendingUp },
   { href: '/search', label: 'Arama', icon: Search },
   { href: '/ai-summary', label: 'AI Özet', icon: Brain },
   { href: '/feeds', label: 'Kaynaklar', icon: Rss },
