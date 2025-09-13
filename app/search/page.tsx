@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import { geminiApi, articleApi } from '@/lib/api';
 import { ArticleCard } from '@/components/article-card';
 import { Search, Loader2, Globe, Database } from 'lucide-react';
 
 export default function SearchPage() {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState<'local' | 'web'>('local');
   const [maxDaysOld, setMaxDaysOld] = useState(2);
@@ -42,6 +44,18 @@ export default function SearchPage() {
       webSearchMutation.mutate({ query: searchQuery, maxDaysOld });
     }
   };
+
+  // Auto search when coming from navbar with query params
+  useEffect(() => {
+    const query = searchParams.get('q');
+    const autoSearch = searchParams.get('auto');
+    
+    if (query && autoSearch === 'true') {
+      setSearchQuery(query);
+      // Automatically perform local search
+      localSearchMutation.mutate(query);
+    }
+  }, [searchParams]);
 
   const isSearching = localSearchMutation.isPending || webSearchMutation.isPending;
 

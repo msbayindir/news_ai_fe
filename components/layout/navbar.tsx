@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Newspaper, Search, Brain, Rss, Home, TrendingUp } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Newspaper, Search, Brain, Rss, Home, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -14,6 +14,11 @@ const navItems = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSehitkamilSearch = () => {
+    router.push('/search?q=Şehitkamil&auto=true');
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -45,6 +50,15 @@ export function Navbar() {
                 </Link>
               );
             })}
+            
+            {/* Şehitkamil Quick Search Button */}
+            <button
+              onClick={handleSehitkamilSearch}
+              className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors ml-2"
+            >
+              <MapPin className="h-4 w-4" />
+              <span>Şehitkamil Haberleri</span>
+            </button>
           </div>
 
           {/* Mobile menu */}
