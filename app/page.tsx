@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { articleApi, Article } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
 import { SkeletonCard } from "@/components/skeleton-card";
@@ -20,6 +20,21 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showLatest, setShowLatest] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Check if we should open sidebar on mount (for mobile category link)
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('showCategories') === 'true' && window.innerWidth < 1024) {
+        setSidebarOpen(true);
+        // Remove the query param after opening
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+  }, []);
 
   // Fetch articles based on selected category, latest, or default categories
   const { data, isLoading, error, refetch } = useQuery({
@@ -68,12 +83,20 @@ export default function Home() {
       setSelectedCategory(category);
     }
     setPage(1);
+    // Close sidebar on mobile after selection
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
   };
 
   const handleLatestClick = () => {
     setSelectedCategory(null);
     setShowLatest(true);
     setPage(1);
+    // Close sidebar on mobile after selection
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
   };
 
 
@@ -90,6 +113,14 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -186,48 +217,48 @@ export default function Home() {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 bg-white rounded-lg shadow-md"
+        className="lg:hidden fixed bottom-4 right-4 z-40 p-3 bg-gray-900 text-white rounded-full shadow-lg"
       >
-        <Menu className="h-6 w-6 text-gray-700" />
+        <Menu className="h-6 w-6" />
       </button>
 
       {/* Main Content */}
       <div className="flex-1 lg:ml-0">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-black">
               {showLatest 
                 ? "En Son Haberler"
-                : selectedCategory
-                ? `${selectedCategory} Haberleri`
-                : "Son Haberler"}
+                : selectedCategory 
+                ? selectedCategory 
+                : "En Son Haberler"}
             </h1>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => fetchNewArticlesMutation.mutate()}
                 disabled={fetchNewArticlesMutation.isPending}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm sm:text-base"
               >
                 {fetchNewArticlesMutation.isPending ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <Newspaper className="h-4 w-4" />
                 )}
-                Yeni Haberleri Getir
+                <span className="hidden sm:inline">Yeni Haberler</span>
               </button>
               <button
                 onClick={() => refetch()}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                disabled={isLoading}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <RefreshCw className="h-4 w-4" />
-                Yenile
+                <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>
 
           {/* Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {isLoading ? (
               // Show skeleton cards while loading
               Array.from({ length: 6 }).map((_, index) => (

@@ -62,7 +62,7 @@ export default function ArticleDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"
@@ -103,10 +103,10 @@ export default function ArticleDetailPage() {
                   ))}
                 </div>
               )}
-
-              <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 leading-tight">
-                {article.title}
-              </h1>
+            </div>
+            
+            <div className="p-4 sm:p-8">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-900">{article.title}</h1>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 pb-6 border-b">
                 {article.pubDate && (
@@ -138,11 +138,8 @@ export default function ArticleDetailPage() {
               )}
 
               {article.content && (
-                <div className="prose prose-lg max-w-none">
-                  <div 
-                    className="text-gray-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: article.content }}
-                  />
+                <div className="prose prose-base sm:prose-lg max-w-none mt-6 text-black">
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 </div>
               )}
 

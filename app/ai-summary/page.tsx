@@ -61,7 +61,7 @@ export default function AISummaryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <Link
@@ -72,10 +72,10 @@ export default function AISummaryPage() {
             <span className="font-medium">Ana Sayfa</span>
           </Link>
 
-          <h1 className="text-3xl font-bold mb-8 text-gray-900">AI Haber Özetleme</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">AI Haber Özetleme</h1>
 
           {/* Summary Form */}
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="h-5 w-5 text-gray-700" />
               <h2 className="text-lg font-semibold text-gray-800">Yeni Özet Oluştur</h2>

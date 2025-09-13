@@ -27,17 +27,17 @@ export default function TrendingPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4 sm:py-8">
       {/* Trending Articles */}
       <div className="mb-12">
-        <div className="flex items-center gap-3 mb-6">
-          <TrendingUp className="h-6 w-6 text-red-600" />
-          <h2 className="text-2xl font-bold">Trend Haberler</h2>
-          <span className="text-sm text-gray-500">Son 24 saat</span>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
+          <TrendingUp className="h-5 sm:h-6 w-5 sm:w-6 text-red-600" />
+          <h2 className="text-xl sm:text-2xl font-bold">Trend Haberler</h2>
+          <span className="text-xs sm:text-sm text-gray-500">Son 24 saat</span>
         </div>
         
         {trendingData?.data?.articles && trendingData.data.articles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {trendingData.data.articles.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
@@ -51,13 +51,13 @@ export default function TrendingPage() {
 
       {/* Latest Articles */}
       <div>
-        <div className="flex items-center gap-3 mb-6">
-          <Clock className="h-6 w-6 text-blue-600" />
-          <h2 className="text-2xl font-bold">En Son Haberler</h2>
+        <div className="flex items-center gap-2 sm:gap-3 mb-6">
+          <Clock className="h-5 sm:h-6 w-5 sm:w-6 text-blue-600" />
+          <h2 className="text-xl sm:text-2xl font-bold">En Son Haberler</h2>
         </div>
         
         {latestData?.data?.articles && latestData.data.articles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {latestData.data.articles.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}

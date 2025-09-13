@@ -68,7 +68,7 @@ function SearchContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-6xl mx-auto">
           {/* Back Button */}
           <Link
@@ -79,11 +79,11 @@ function SearchContent() {
             <span className="font-medium">Ana Sayfa</span>
           </Link>
 
-          <h1 className="text-3xl font-bold mb-8 text-gray-900">Haber Ara</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">Haber Ara</h1>
 
           {/* Search Form */}
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <div className="flex flex-col md:flex-row gap-4 mb-4">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 mb-4">
               <input
                 type="text"
                 value={searchQuery}
@@ -110,7 +110,7 @@ function SearchContent() {
             </div>
 
             {/* Search Type Selector */}
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -162,7 +162,7 @@ function SearchContent() {
           {searchType === "local" && (
             <div>
               {localSearchMutation.isPending ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {Array.from({ length: 6 }).map((_, index) => (
                     <SkeletonCard key={index} />
                   ))}
@@ -172,7 +172,7 @@ function SearchContent() {
                   <h2 className="text-xl font-semibold mb-4 text-gray-800">
                     Veritabanı Sonuçları ({localResults.length})
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {localResults.map((article) => (
                       <ArticleCard key={article.id} article={article} />
                     ))}
