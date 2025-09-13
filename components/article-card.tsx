@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, ExternalLink } from "lucide-react";
+import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { Article } from "@/lib/api";
 import { timeAgo, truncateText } from "@/lib/utils";
+import { CATEGORY_COLORS } from "@/lib/constants";
 
 interface ArticleCardProps {
   article: Article;
@@ -36,6 +37,22 @@ export function ArticleCard({ article }: ArticleCardProps) {
           <p className="text-gray-600 text-sm mb-3 line-clamp-3">
             {truncateText(article.description, 150)}
           </p>
+        )}
+
+        {article.categories && article.categories.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {article.categories.map((category) => (
+              <span
+                key={category.id}
+                className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${
+                  CATEGORY_COLORS[category.name] || CATEGORY_COLORS['Diğer']
+                }`}
+              >
+                <Tag className="h-3 w-3" />
+                {category.name}
+              </span>
+            ))}
+          </div>
         )}
 
         <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">

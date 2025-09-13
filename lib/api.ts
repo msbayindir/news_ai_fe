@@ -89,18 +89,26 @@ export interface PaginatedResponse<T> {
   };
 }
 
+export interface ArticleParams {
+  page?: number;
+  limit?: number;
+  sourceId?: string;
+  categoryId?: string;
+  categoryNames?: string[];
+  startDate?: string;
+  endDate?: string;
+  search?: string;
+}
+
 // Article APIs
 export const articleApi = {
-  getArticles: async (params?: {
-    page?: number;
-    limit?: number;
-    sourceId?: string;
-    categoryId?: string;
-    startDate?: string;
-    endDate?: string;
-    search?: string;
-  }) => {
-    const response = await api.get('/articles', { params });
+  getArticles: async (params?: ArticleParams) => {
+    // Convert categoryNames array to comma-separated string for query param
+    const queryParams = {
+      ...params,
+      categoryNames: params?.categoryNames?.join(',')
+    };
+    const response = await api.get('/articles', { params: queryParams });
     return response.data;
   },
 
@@ -111,7 +119,13 @@ export const articleApi = {
 
   getLatestArticles: async (limit?: number) => {
     const response = await api.get('/articles/latest', { params: { limit } });
-    return response.data;
+    // Ensure the response format matches the expected structure
+    return {
+      data: {
+        articles: response.data.data || response.data,
+        pagination: null
+      }
+    };
   },
 
   getTrendingArticles: async (limit?: number) => {
@@ -174,8 +188,8 @@ export const geminiApi = {
     return response.data;
   },
 
-  searchWeb: async (data: { query: string; maxDaysOld?: number }) => {
-    const response = await api.post('/gemini/search', data);
+  searchWeb: async (query: string, maxDaysOld: number = 7) => {
+    const response = await api.post('/gemini/search-web', { query, maxDaysOld });
     return response.data;
   },
 

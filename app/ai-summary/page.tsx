@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { geminiApi, Summary } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
-import { Brain, Calendar, Loader2, FileText, Clock } from 'lucide-react';
+import { Brain, Calendar, Loader2, FileText, Clock, ArrowLeft, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AISummaryPage() {
   const [startDate, setStartDate] = useState('');
@@ -59,18 +60,28 @@ export default function AISummaryPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
-          <Brain className="h-8 w-8 text-blue-600" />
-          <h1 className="text-3xl font-bold">AI Haber Özetleme</h1>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="font-medium">Ana Sayfa</span>
+          </Link>
 
-        {/* Summary Form */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Yeni Özet Oluştur</h2>
+          <h1 className="text-3xl font-bold mb-8 text-gray-900">AI Haber Özetleme</h1>
+
+          {/* Summary Form */}
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="h-5 w-5 text-gray-700" />
+              <h2 className="text-lg font-semibold text-gray-800">Yeni Özet Oluştur</h2>
+            </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Başlangıç Tarihi
@@ -79,7 +90,7 @@ export default function AISummaryPage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-900"
               />
             </div>
             
@@ -91,7 +102,7 @@ export default function AISummaryPage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-900"
               />
             </div>
           </div>
@@ -99,27 +110,27 @@ export default function AISummaryPage() {
           <div className="flex gap-2 mb-4">
             <button
               onClick={setLastWeek}
-              className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              className="px-3 py-1.5 text-sm bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
             >
               Son 7 Gün
             </button>
             <button
               onClick={setLastMonth}
-              className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              className="px-3 py-1.5 text-sm bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
             >
               Son 30 Gün
             </button>
-          </div>
+            </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Özel Prompt (İsteğe bağlı)
+              Özel Prompt (Opsiyonel)
             </label>
             <textarea
               value={customPrompt}
               onChange={(e) => setCustomPrompt(e.target.value)}
-              placeholder="Örn: Ekonomi haberlerine odaklan, spor haberlerini özetle..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              placeholder="Örn: Ekonomi haberlerine odaklan, pozitif gelişmeleri vurgula..."
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
               rows={3}
             />
           </div>
@@ -127,16 +138,16 @@ export default function AISummaryPage() {
           <button
             onClick={handleSummarize}
             disabled={summarizeMutation.isPending}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
             {summarizeMutation.isPending ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" />
                 Özet Oluşturuluyor...
               </>
             ) : (
               <>
-                <Brain className="h-4 w-4" />
+                <Brain className="h-5 w-5" />
                 Özet Oluştur
               </>
             )}
@@ -145,49 +156,46 @@ export default function AISummaryPage() {
 
         {/* Current Summary */}
         {summary && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <FileText className="h-5 w-5 text-blue-600" />
-              AI Özeti
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
+              <FileText className="h-5 w-5" />
+              Oluşturulan Özet
             </h2>
-            <div className="prose max-w-none">
-              <div className="whitespace-pre-wrap text-gray-700">{summary}</div>
+            <div className="prose prose-lg max-w-none">
+              <div 
+                className="text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: summary }}
+              />
             </div>
           </div>
         )}
 
         {/* Previous Summaries */}
         {summariesData?.data?.summaries && summariesData.data.summaries.length > 0 && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-gray-600" />
-              Geçmiş Özetler
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
+              <Clock className="h-5 w-5" />
+              Önceki Özetler
             </h2>
-            
             <div className="space-y-4">
-              {summariesData.data.summaries.map((item: Summary) => (
-                <div key={item.id} className="border-l-4 border-blue-500 pl-4 py-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+              {summariesData.data.summaries.map((sum: Summary) => (
+                <div key={sum.id} className="border-l-2 border-gray-200 pl-4 py-2 hover:border-gray-400 transition-colors">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                     <Calendar className="h-4 w-4" />
-                    <span>
-                      {formatDate(item.startDate)} - {formatDate(item.endDate)}
-                    </span>
+                    <span>{formatDate(sum.createdAt)}</span>
                     <span className="text-gray-400">•</span>
-                    <span>{item._count?.articles || 0} haber</span>
+                    <span>{(sum as any).articleCount || sum._count?.articles || 0} haber</span>
                   </div>
-                  <p className="text-gray-700 line-clamp-3">{item.content}</p>
-                  <button
-                    onClick={() => setSummary(item.content)}
-                    className="text-blue-600 hover:text-blue-800 text-sm mt-2"
-                  >
-                    Tamamını Göster
-                  </button>
+                  <div className="text-gray-700">
+                    <div dangerouslySetInnerHTML={{ __html: (sum.content || '').substring(0, 200) + '...' }} />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }
