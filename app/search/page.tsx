@@ -9,6 +9,46 @@ import { SkeletonCard } from "@/components/skeleton-card";
 import { Search, Loader2, Globe, Database, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+// Format AI response with proper HTML styling
+const formatAIResponse = (text: string): string => {
+  if (!text) return '';
+  
+  return text
+    // Convert markdown headers to HTML
+    .replace(/^#### (.*$)/gm, '<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3 border-l-4 border-blue-400 pl-3">$1</h4>')
+    .replace(/^### (.*$)/gm, '<h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-b border-gray-200 pb-2">$1</h3>')
+    .replace(/^## (.*$)/gm, '<h2 class="text-2xl font-bold text-gray-900 mt-10 mb-6 border-b-2 border-blue-200 pb-3">$1</h2>')
+    .replace(/^# (.*$)/gm, '<h1 class="text-3xl font-bold text-gray-900 mt-12 mb-8">$1</h1>')
+    
+    // Convert bold text
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+    
+    // Convert paragraphs
+    .replace(/\n\n/g, '</p><p class="mb-4 text-gray-800 leading-relaxed">')
+    
+    // Add opening paragraph tag
+    .replace(/^/, '<p class="mb-4 text-gray-800 leading-relaxed">')
+    
+    // Add closing paragraph tag
+    .replace(/$/, '</p>')
+    
+    // Fix empty paragraphs
+    .replace(/<p class="mb-4 text-gray-800 leading-relaxed"><\/p>/g, '')
+    
+    // Convert numbered lists
+    .replace(/^\d+\.\s+(.*$)/gm, '<li class="mb-2 ml-4">$1</li>')
+    
+    // Convert bullet points
+    .replace(/^[-•]\s+(.*$)/gm, '<li class="mb-2 ml-4 list-disc">$1</li>')
+    
+    // Wrap consecutive list items in ul tags
+    .replace(/(<li class="mb-2 ml-4[^"]*">.*?<\/li>\s*)+/g, '<ul class="mb-4 ml-6 space-y-1">$&</ul>')
+    
+    // Add spacing for better readability
+    .replace(/(<h[1-3][^>]*>)/g, '<div class="mt-6">$1')
+    .replace(/(<\/h[1-3]>)/g, '$1</div>');
+};
+
 function SearchContent() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
@@ -212,27 +252,43 @@ function SearchContent() {
                   </h2>
                   
                   {/* AI Generated Content */}
-                  <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-gray-700">AI Özeti</span>
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-100 mb-6">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100 rounded-t-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">AI Araştırma Raporu</h3>
+                          <p className="text-sm text-gray-600">Google Search ile desteklenen kapsamlı analiz</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="prose prose-gray max-w-none">
-                      <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-                        {webResults.textWithCitations || webResults.text}
-                      </p>
+                    <div className="p-6">
+                      <div className="prose prose-lg max-w-none">
+                        <div 
+                          className="text-gray-800 leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html: formatAIResponse(webResults.textWithCitations || webResults.text)
+                          }}
+                        />
+                      </div>
                     </div>
                     
                     {/* Search Queries Used */}
                     {webResults.searchQueries.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <span className="text-xs text-gray-500 font-medium">Arama sorguları: </span>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {webResults.searchQueries.map((query, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                              {query}
-                            </span>
-                          ))}
+                      <div className="px-6 pb-4 border-t border-gray-100">
+                        <div className="pt-4">
+                          <span className="text-xs text-gray-500 font-medium">Kullanılan arama sorguları: </span>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {webResults.searchQueries.map((query, idx) => (
+                              <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
+                                {query}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -240,27 +296,48 @@ function SearchContent() {
 
                   {/* Sources */}
                   {webResults.sources.length > 0 && (
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-medium text-gray-800 mb-3">Kaynaklar</h3>
-                      {webResults.sources.map((source, index) => (
-                        <div
-                          key={index}
-                          className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border-l-4 border-blue-500"
-                        >
-                          <a
-                            href={source.web?.uri}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-base font-medium text-gray-900 hover:text-blue-600 mb-1 block transition-colors"
-                          >
-                            {source.web?.title || `Kaynak ${index + 1}`}
-                          </a>
-                          <div className="text-sm text-gray-500">
-                            <span className="font-medium">[{index + 1}]</span>
-                            <span className="ml-2">{source.web?.uri}</span>
-                          </div>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+                      <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 rounded-t-lg">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.102m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                          </svg>
+                          <h3 className="text-lg font-semibold text-gray-900">Kaynaklar ({webResults.sources.length})</h3>
                         </div>
-                      ))}
+                        <p className="text-sm text-gray-600 mt-1">Bu raporda kullanılan haber kaynakları</p>
+                      </div>
+                      <div className="p-6">
+                        <div className="grid gap-4">
+                          {webResults.sources.map((source, index) => (
+                            <div
+                              key={index}
+                              className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            >
+                              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                                {index + 1}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <a
+                                  href={source.web?.uri}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-base font-medium text-gray-900 hover:text-blue-600 transition-colors block mb-1"
+                                >
+                                  {source.web?.title || `Kaynak ${index + 1}`}
+                                </a>
+                                <p className="text-sm text-gray-500 break-all">
+                                  {source.web?.uri}
+                                </p>
+                              </div>
+                              <div className="flex-shrink-0">
+                                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </>
