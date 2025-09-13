@@ -36,9 +36,9 @@ export default function TrendingPage() {
           <span className="text-sm text-gray-500">Son 24 saat</span>
         </div>
         
-        {trendingData?.data && trendingData.data.length > 0 ? (
+        {trendingData?.data?.articles && trendingData.data.articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trendingData.data.map((article: Article) => (
+            {trendingData.data.articles.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
@@ -56,9 +56,9 @@ export default function TrendingPage() {
           <h2 className="text-2xl font-bold">En Son Haberler</h2>
         </div>
         
-        {latestData?.data && latestData.data.length > 0 ? (
+        {latestData?.data?.articles && latestData.data.articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {latestData.data.map((article: Article) => (
+            {latestData.data.articles.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>

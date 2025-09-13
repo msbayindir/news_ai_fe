@@ -57,7 +57,7 @@ function SearchContent() {
     const query = searchParams.get("q");
     const autoSearch = searchParams.get("auto");
 
-    if (query && autoSearch === "true") {
+    if (query && autoSearch === "true" && query !== searchQuery) {
       setSearchQuery(query);
       // Automatically perform local search
       localSearchMutation.mutate(query);
@@ -65,8 +65,6 @@ function SearchContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  const isSearching =
-    localSearchMutation.isPending || webSearchMutation.isPending;
 
   return (
     <div className="min-h-screen bg-gray-50">

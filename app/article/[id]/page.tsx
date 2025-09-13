@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { articleApi, Category } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
-import { Calendar, Tag, ExternalLink, ArrowLeft, Clock, Globe, Loader2, User } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Clock, Globe, User } from 'lucide-react';
 import { CATEGORY_COLORS } from '@/lib/constants';
 
 export default function ArticleDetailPage() {

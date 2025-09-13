@@ -13,7 +13,6 @@ import {
 import {
   STANDARD_CATEGORIES,
   DEFAULT_CATEGORIES,
-  CATEGORY_COLORS,
 } from "@/lib/constants";
 
 export default function Home() {
@@ -144,7 +143,7 @@ export default function Home() {
             <div className="border-t pt-2 mt-2">
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-4">Kategoriler</p>
               {STANDARD_CATEGORIES.map((category) => {
-                const categoryIcons: { [key: string]: any } = {
+                const categoryIcons: { [key: string]: React.ComponentType<{ className?: string }> } = {
                   'Dünya': Globe,
                   'Ekonomi': TrendingUp,
                   'Siyaset': Landmark,

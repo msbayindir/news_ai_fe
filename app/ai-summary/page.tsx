@@ -184,7 +184,7 @@ export default function AISummaryPage() {
                     <Calendar className="h-4 w-4" />
                     <span>{formatDate(sum.createdAt)}</span>
                     <span className="text-gray-400">•</span>
-                    <span>{(sum as any).articleCount || sum._count?.articles || 0} haber</span>
+                    <span>{(sum as Summary & { articleCount?: number }).articleCount || sum._count?.articles || 0} haber</span>
                   </div>
                   <div className="text-gray-700">
                     <div dangerouslySetInnerHTML={{ __html: (sum.content || '').substring(0, 200) + '...' }} />
