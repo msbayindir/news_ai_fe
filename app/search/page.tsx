@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { geminiApi, articleApi, Article, SearchResult } from "@/lib/api";
+import { geminiApi, articleApi, Article, SearchResult, GeminiSearchResult } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
 import { SkeletonCard } from "@/components/skeleton-card";
 import { Search, Loader2, Globe, Database, ArrowLeft } from "lucide-react";
@@ -15,7 +15,7 @@ function SearchContent() {
   const [searchType, setSearchType] = useState<"local" | "web">("local");
   const [maxDaysOld, setMaxDaysOld] = useState(2);
   const [localResults, setLocalResults] = useState<Article[]>([]);
-  const [webResults, setWebResults] = useState<SearchResult[]>([]);
+  const [webResults, setWebResults] = useState<GeminiSearchResult | null>(null);
 
   // Local search mutation
   const localSearchMutation = useMutation({
@@ -35,7 +35,7 @@ function SearchContent() {
       maxDaysOld: number;
     }) => geminiApi.searchWeb(query, maxDaysOld),
     onSuccess: (data) => {
-      setWebResults(data.data || []);
+      setWebResults(data.data || null);
     },
   });
 
@@ -205,39 +205,64 @@ function SearchContent() {
                     </div>
                   ))}
                 </div>
-              ) : webResults.length > 0 ? (
+              ) : webResults && webResults.text ? (
                 <>
                   <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                    Web Sonuçları ({webResults.length})
+                    Web Sonuçları ({webResults.sourcesCount} kaynak)
                   </h2>
-                  <div className="space-y-4">
-                    {webResults.map((result, index) => (
-                      <div
-                        key={index}
-                        className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
-                      >
-                        <a
-                          href={result.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-lg font-semibold text-gray-900 hover:text-gray-700 mb-2 block"
-                        >
-                          {result.title}
-                        </a>
-                        <p className="text-gray-600 mb-3 leading-relaxed">
-                          {result.snippet}
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <span className="font-medium">
-                            {result.displayLink}
-                          </span>
-                          {result.publishedDate && (
-                            <span>{result.publishedDate}</span>
-                          )}
+                  
+                  {/* AI Generated Content */}
+                  <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-gray-700">AI Özeti</span>
+                    </div>
+                    <div className="prose prose-gray max-w-none">
+                      <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+                        {webResults.textWithCitations || webResults.text}
+                      </p>
+                    </div>
+                    
+                    {/* Search Queries Used */}
+                    {webResults.searchQueries.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <span className="text-xs text-gray-500 font-medium">Arama sorguları: </span>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {webResults.searchQueries.map((query, idx) => (
+                            <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                              {query}
+                            </span>
+                          ))}
                         </div>
                       </div>
-                    ))}
+                    )}
                   </div>
+
+                  {/* Sources */}
+                  {webResults.sources.length > 0 && (
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-medium text-gray-800 mb-3">Kaynaklar</h3>
+                      {webResults.sources.map((source, index) => (
+                        <div
+                          key={index}
+                          className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border-l-4 border-blue-500"
+                        >
+                          <a
+                            href={source.web?.uri}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-base font-medium text-gray-900 hover:text-blue-600 mb-1 block transition-colors"
+                          >
+                            {source.web?.title || `Kaynak ${index + 1}`}
+                          </a>
+                          <div className="text-sm text-gray-500">
+                            <span className="font-medium">[{index + 1}]</span>
+                            <span className="ml-2">{source.web?.uri}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </>
               ) : (
                 searchQuery &&

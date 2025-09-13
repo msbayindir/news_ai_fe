@@ -60,6 +60,7 @@ export interface Summary {
   };
 }
 
+// Old SearchResult interface - keeping for backward compatibility
 export interface SearchResult {
   title: string;
   snippet: string;
@@ -67,6 +68,22 @@ export interface SearchResult {
   displayLink: string;
   imageUrl?: string;
   publishedDate?: string;
+}
+
+// New Gemini Search interfaces matching backend
+export interface GroundingChunk {
+  web?: {
+    uri: string;
+    title: string;
+  };
+}
+
+export interface GeminiSearchResult {
+  text: string;
+  sources: GroundingChunk[];
+  searchQueries: string[];
+  textWithCitations?: string;
+  sourcesCount: number;
 }
 
 export interface Statistics {
@@ -190,7 +207,7 @@ export const geminiApi = {
     return response.data;
   },
 
-  searchWeb: async (query: string, maxDaysOld: number = 7) => {
+  searchWeb: async (query: string, maxDaysOld: number = 7): Promise<{ success: boolean; data: GeminiSearchResult }> => {
     const response = await api.post("/gemini/search", { query, maxDaysOld });
     return response.data;
   },
