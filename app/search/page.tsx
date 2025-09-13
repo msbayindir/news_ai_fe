@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { geminiApi, articleApi, Article, SearchResult } from '@/lib/api';
 import { ArticleCard } from '@/components/article-card';
 import { Search, Loader2, Globe, Database } from 'lucide-react';
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState<'local' | 'web'>('local');
@@ -91,7 +91,7 @@ export default function SearchPage() {
               }`}
             >
               <Globe className="h-4 w-4" />
-              Web'de Ara (AI)
+              Web&apos;de Ara (AI)
             </button>
           </div>
 
@@ -193,5 +193,17 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }
