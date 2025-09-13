@@ -1,17 +1,14 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Newspaper, Search, Brain, Rss, Home, MapPin, Menu, X, TrendingUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { Newspaper, Search, Home, MapPin, Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/trending', label: 'Trend', icon: TrendingUp },
-  { href: '/search', label: 'Arama', icon: Search },
-  { href: '/ai-summary', label: 'AI Özet', icon: Brain },
-  { href: '/feeds', label: 'Kaynaklar', icon: Rss },
+  { href: "/", label: "Ana Sayfa", icon: Home },
+  { href: "/search", label: "Arama", icon: Search },
 ];
 
 export function Navbar() {
@@ -20,7 +17,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSehitkamilSearch = () => {
-    router.push('/search?q=Şehitkamil&auto=true');
+    router.push("/search?q=Şehitkamil&auto=true");
     setMobileMenuOpen(false);
   };
 
@@ -37,16 +34,16 @@ export function Navbar() {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
-              
+
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                    "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
                     isActive
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -54,7 +51,7 @@ export function Navbar() {
                 </Link>
               );
             })}
-            
+
             {/* Şehitkamil Quick Search Button */}
             <button
               onClick={handleSehitkamilSearch}
@@ -67,7 +64,7 @@ export function Navbar() {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden">
-            <button 
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg hover:bg-gray-100"
             >
@@ -87,17 +84,17 @@ export function Navbar() {
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
-                
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      'flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium transition-colors',
+                      "flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium transition-colors",
                       isActive
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? "bg-blue-100 text-blue-700"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -105,7 +102,7 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              
+
               {/* Şehitkamil Quick Search Button for Mobile */}
               <button
                 onClick={handleSehitkamilSearch}
@@ -114,16 +111,6 @@ export function Navbar() {
                 <MapPin className="h-5 w-5" />
                 <span>Şehitkamil Haberleri</span>
               </button>
-              
-              {/* Categories Link for Mobile */}
-              <Link
-                href="/?showCategories=true"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center space-x-3 px-3 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors mt-2"
-              >
-                <Newspaper className="h-5 w-5" />
-                <span>Kategoriler</span>
-              </Link>
             </div>
           </div>
         )}
