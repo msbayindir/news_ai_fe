@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { feedApi } from '@/lib/api';
+import { feedApi, FeedSource } from '@/lib/api';
 import { Rss, Plus, Trash2, RefreshCw, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
@@ -126,7 +126,7 @@ export default function FeedsPage() {
 
         {/* Feed List */}
         <div className="space-y-4">
-          {feedsData?.data?.map((feed: any) => (
+          {feedsData?.data?.map((feed: FeedSource) => (
             <div key={feed.id} className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">

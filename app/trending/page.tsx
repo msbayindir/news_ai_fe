@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { articleApi } from '@/lib/api';
+import { articleApi, Article } from '@/lib/api';
 import { ArticleCard } from '@/components/article-card';
 import { TrendingUp, Loader2, Clock } from 'lucide-react';
 
@@ -38,7 +38,7 @@ export default function TrendingPage() {
         
         {trendingData?.data && trendingData.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trendingData.data.map((article: any) => (
+            {trendingData.data.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
@@ -58,7 +58,7 @@ export default function TrendingPage() {
         
         {latestData?.data && latestData.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {latestData.data.map((article: any) => (
+            {latestData.data.map((article: Article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>

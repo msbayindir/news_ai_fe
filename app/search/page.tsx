@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { geminiApi, articleApi } from '@/lib/api';
+import { geminiApi, articleApi, Article, SearchResult } from '@/lib/api';
 import { ArticleCard } from '@/components/article-card';
 import { Search, Loader2, Globe, Database } from 'lucide-react';
 
@@ -12,8 +12,8 @@ export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState<'local' | 'web'>('local');
   const [maxDaysOld, setMaxDaysOld] = useState(2);
-  const [localResults, setLocalResults] = useState<any[]>([]);
-  const [webResults, setWebResults] = useState<any[]>([]);
+  const [localResults, setLocalResults] = useState<Article[]>([]);
+  const [webResults, setWebResults] = useState<SearchResult[]>([]);
 
   // Local search mutation
   const localSearchMutation = useMutation({
@@ -55,6 +55,7 @@ export default function SearchPage() {
       // Automatically perform local search
       localSearchMutation.mutate(query);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const isSearching = localSearchMutation.isPending || webSearchMutation.isPending;
@@ -108,7 +109,7 @@ export default function SearchPage() {
               <select
                 value={maxDaysOld}
                 onChange={(e) => setMaxDaysOld(Number(e.target.value))}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium"
               >
                 <option value={1}>Son 1 gün</option>
                 <option value={2}>Son 2 gün</option>

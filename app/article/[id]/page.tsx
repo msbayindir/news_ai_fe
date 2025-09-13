@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { articleApi } from '@/lib/api';
+import { articleApi, Category } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import { Calendar, User, Tag, ExternalLink, ArrowLeft, Loader2 } from 'lucide-react';
 
@@ -90,7 +90,7 @@ export default function ArticleDetailPage() {
 
             {article.categories && article.categories.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
-                {article.categories.map((category: any) => (
+                {article.categories.map((category: Category) => (
                   <span
                     key={category.id}
                     className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"

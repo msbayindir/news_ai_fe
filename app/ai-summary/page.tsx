@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { geminiApi } from '@/lib/api';
+import { geminiApi, Summary } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import { Brain, Calendar, Loader2, FileText, Clock } from 'lucide-react';
 
@@ -165,7 +165,7 @@ export default function AISummaryPage() {
             </h2>
             
             <div className="space-y-4">
-              {summariesData.data.summaries.map((item: any) => (
+              {summariesData.data.summaries.map((item: Summary) => (
                 <div key={item.id} className="border-l-4 border-blue-500 pl-4 py-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
                     <Calendar className="h-4 w-4" />
@@ -173,7 +173,7 @@ export default function AISummaryPage() {
                       {formatDate(item.startDate)} - {formatDate(item.endDate)}
                     </span>
                     <span className="text-gray-400">•</span>
-                    <span>{item._count.articles} haber</span>
+                    <span>{item._count?.articles || 0} haber</span>
                   </div>
                   <p className="text-gray-700 line-clamp-3">{item.content}</p>
                   <button

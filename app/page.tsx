@@ -2,20 +2,18 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { articleApi } from '@/lib/api';
+import { articleApi, Article } from '@/lib/api';
 import { ArticleCard } from '@/components/article-card';
-import { Loader2, Filter, RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 
 export default function Home() {
   const [page, setPage] = useState(1);
-  const [selectedSource, setSelectedSource] = useState('');
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['articles', page, selectedSource],
+    queryKey: ['articles', page],
     queryFn: () => articleApi.getArticles({
       page,
       limit: 12,
-      sourceId: selectedSource || undefined,
     }),
   });
 
@@ -80,7 +78,7 @@ export default function Home() {
 
       {/* Articles Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {data?.data?.articles?.map((article: any) => (
+        {data?.data?.articles?.map((article: Article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
       </div>
