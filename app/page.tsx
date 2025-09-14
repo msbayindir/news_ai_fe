@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { articleApi, analyticsApi, Article } from "@/lib/api";
+import { articleApi, Article } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
 import { SkeletonCard } from "@/components/skeleton-card";
 import { SidebarWordCloud } from "@/components/sidebar-word-cloud";

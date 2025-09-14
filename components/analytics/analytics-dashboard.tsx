@@ -9,15 +9,13 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  BarChart3,
   RefreshCw,
   Download,
   Calendar,
   Loader2,
   AlertCircle,
 } from "lucide-react";
-import { format } from "date-fns";
-import { tr } from "date-fns/locale";
+
 
 export function AnalyticsDashboard() {
   const [selectedReportType, setSelectedReportType] = useState<
