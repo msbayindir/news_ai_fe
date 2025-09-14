@@ -2,9 +2,10 @@
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { articleApi, Article } from "@/lib/api";
+import { articleApi, analyticsApi, Article } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
 import { SkeletonCard } from "@/components/skeleton-card";
+import { SidebarWordCloud } from "@/components/sidebar-word-cloud";
 import { 
   Loader2, RefreshCw, Newspaper, Clock, Menu, X, Check,
   Globe, Briefcase, Heart, Zap, GraduationCap, Trophy,
@@ -210,6 +211,9 @@ export default function Home() {
                 );
               })}
             </div>
+            
+            {/* Word Cloud */}
+            <SidebarWordCloud />
           </div>
         </div>
       </div>

@@ -8,44 +8,55 @@ import { ReportCard } from "./report-card";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { 
-  BarChart3, 
-  RefreshCw, 
-  Download, 
+import {
+  BarChart3,
+  RefreshCw,
+  Download,
   Calendar,
   Loader2,
-  AlertCircle 
+  AlertCircle,
 } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
 export function AnalyticsDashboard() {
-  const [selectedReportType, setSelectedReportType] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+  const [selectedReportType, setSelectedReportType] = useState<
+    "daily" | "weekly" | "monthly"
+  >("daily");
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   // Fetch word frequency
-  const { data: wordFrequency, isLoading: wordFreqLoading, refetch: refetchWordFreq } = useQuery({
-    queryKey: ['wordFrequency'],
+  const {
+    data: wordFrequency,
+    isLoading: wordFreqLoading,
+    refetch: refetchWordFreq,
+  } = useQuery({
+    queryKey: ["wordFrequency"],
     queryFn: analyticsApi.getLatestWordFrequency,
   });
 
   // Fetch latest report
-  const { data: latestReport, isLoading: reportLoading, refetch: refetchReport } = useQuery({
-    queryKey: ['latestReport', selectedReportType],
+  const {
+    data: latestReport,
+    isLoading: reportLoading,
+    refetch: refetchReport,
+  } = useQuery({
+    queryKey: ["latestReport", selectedReportType],
     queryFn: () => analyticsApi.getLatestReport(selectedReportType),
   });
 
   // Fetch report history
   const { data: reportHistory, isLoading: historyLoading } = useQuery({
-    queryKey: ['reportHistory', selectedReportType],
+    queryKey: ["reportHistory", selectedReportType],
     queryFn: () => analyticsApi.getReportHistory(selectedReportType, 10),
   });
 
   // Fetch specific report details
   const { data: reportDetails } = useQuery({
-    queryKey: ['reportDetails', selectedReportId],
-    queryFn: () => selectedReportId ? analyticsApi.getReportById(selectedReportId) : null,
+    queryKey: ["reportDetails", selectedReportId],
+    queryFn: () =>
+      selectedReportId ? analyticsApi.getReportById(selectedReportId) : null,
     enabled: !!selectedReportId,
   });
 
@@ -53,24 +64,25 @@ export function AnalyticsDashboard() {
   const generateWordFreqMutation = useMutation({
     mutationFn: () => analyticsApi.generateWordFrequency(50),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['wordFrequency'] });
+      queryClient.invalidateQueries({ queryKey: ["wordFrequency"] });
     },
   });
 
   // Generate report mutation
   const generateReportMutation = useMutation({
-    mutationFn: (type: 'daily' | 'weekly' | 'monthly') => analyticsApi.generateReport(type),
+    mutationFn: (type: "daily" | "weekly" | "monthly") =>
+      analyticsApi.generateReport(type),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['latestReport'] });
-      queryClient.invalidateQueries({ queryKey: ['reportHistory'] });
+      queryClient.invalidateQueries({ queryKey: ["latestReport"] });
+      queryClient.invalidateQueries({ queryKey: ["reportHistory"] });
     },
   });
 
   const handleGenerateWordFrequency = () => {
-    generateWordFreqMutation.mutate();
+    generateWordFreqMutation.mutate(); // Use 50 articles for Gemini xanalysis
   };
 
-  const handleGenerateReport = (type: 'daily' | 'weekly' | 'monthly') => {
+  const handleGenerateReport = (type: "daily" | "weekly" | "monthly") => {
     generateReportMutation.mutate(type);
   };
 
@@ -89,11 +101,7 @@ export function AnalyticsDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            onClick={() => refetchWordFreq()}
-            variant="outline"
-            size="sm"
-          >
+          <Button onClick={() => refetchWordFreq()} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Yenile
           </Button>
@@ -106,7 +114,7 @@ export function AnalyticsDashboard() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              Kelime Frekansı Analizi
+              Gemini AI Kelime Analizi
             </CardTitle>
             <Button
               onClick={handleGenerateWordFrequency}
@@ -135,12 +143,22 @@ export function AnalyticsDashboard() {
           ) : wordFrequency?.data ? (
             <div className="space-y-4">
               <div className="flex items-center justify-between text-sm text-gray-500">
-                <span>{wordFrequency.data.articleCount} haber analiz edildi</span>
                 <span>
-                  {format(new Date(wordFrequency.data.createdAt), "d MMMM yyyy HH:mm", { locale: tr })}
+                  {wordFrequency.data.articleCount} haber Gemini AI ile analiz
+                  edildi
+                </span>
+                <span>
+                  {format(
+                    new Date(wordFrequency.data.createdAt),
+                    "d MMMM yyyy HH:mm",
+                    { locale: tr }
+                  )}
                 </span>
               </div>
-              <WordCloud words={wordFrequency.data.words} />
+              <WordCloud
+                words={wordFrequency.data.words}
+                title="Gemini AI Kelime Analizi"
+              />
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-64 text-gray-500">
@@ -167,7 +185,12 @@ export function AnalyticsDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs value={selectedReportType} onValueChange={(v) => setSelectedReportType(v as 'daily' | 'weekly' | 'monthly')}>
+          <Tabs
+            value={selectedReportType}
+            onValueChange={(v) =>
+              setSelectedReportType(v as "daily" | "weekly" | "monthly")
+            }
+          >
             <div className="flex items-center justify-between mb-4">
               <TabsList>
                 <TabsTrigger value="daily">Günlük</TabsTrigger>
@@ -203,7 +226,9 @@ export function AnalyticsDashboard() {
                   {/* Latest Report */}
                   {latestReport?.data && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3">En Son Rapor</h3>
+                      <h3 className="text-lg font-semibold mb-3">
+                        En Son Rapor
+                      </h3>
                       <ReportCard
                         report={latestReport.data}
                         onViewDetails={handleViewReportDetails}
@@ -215,7 +240,9 @@ export function AnalyticsDashboard() {
                   {/* Report History */}
                   {reportHistory?.data && reportHistory.data.length > 0 && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3">Rapor Geçmişi</h3>
+                      <h3 className="text-lg font-semibold mb-3">
+                        Rapor Geçmişi
+                      </h3>
                       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         {reportHistory.data.map((report) => (
                           <ReportCard
@@ -228,19 +255,31 @@ export function AnalyticsDashboard() {
                     </div>
                   )}
 
-                  {!latestReport?.data && (!reportHistory?.data || reportHistory.data.length === 0) && (
-                    <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                      <AlertCircle className="h-12 w-12 mb-4" />
-                      <p>Henüz {selectedReportType === 'daily' ? 'günlük' : selectedReportType === 'weekly' ? 'haftalık' : 'aylık'} rapor oluşturulmamış</p>
-                      <Button
-                        onClick={() => handleGenerateReport(selectedReportType)}
-                        className="mt-4"
-                        size="sm"
-                      >
-                        İlk Raporu Oluştur
-                      </Button>
-                    </div>
-                  )}
+                  {!latestReport?.data &&
+                    (!reportHistory?.data ||
+                      reportHistory.data.length === 0) && (
+                      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                        <AlertCircle className="h-12 w-12 mb-4" />
+                        <p>
+                          Henüz{" "}
+                          {selectedReportType === "daily"
+                            ? "günlük"
+                            : selectedReportType === "weekly"
+                            ? "haftalık"
+                            : "aylık"}{" "}
+                          rapor oluşturulmamış
+                        </p>
+                        <Button
+                          onClick={() =>
+                            handleGenerateReport(selectedReportType)
+                          }
+                          className="mt-4"
+                          size="sm"
+                        >
+                          İlk Raporu Oluştur
+                        </Button>
+                      </div>
+                    )}
                 </>
               )}
             </TabsContent>
@@ -264,10 +303,7 @@ export function AnalyticsDashboard() {
             </div>
           </CardHeader>
           <CardContent>
-            <ReportCard
-              report={reportDetails.data}
-              showFullContent={true}
-            />
+            <ReportCard report={reportDetails.data} showFullContent={true} />
             {reportDetails.data.wordCloud && (
               <div className="mt-4">
                 <WordCloud

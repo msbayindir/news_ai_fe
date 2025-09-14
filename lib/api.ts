@@ -104,7 +104,7 @@ export interface WordFrequency {
 
 export interface Report {
   id: string;
-  type: 'daily' | 'weekly' | 'monthly';
+  type: "daily" | "weekly" | "monthly";
   startDate: string;
   endDate: string;
   articleCount: number;
@@ -121,7 +121,7 @@ export interface Report {
 
 export interface ReportHistory {
   id: string;
-  type: 'daily' | 'weekly' | 'monthly';
+  type: "daily" | "weekly" | "monthly";
   startDate: string;
   endDate: string;
   articleCount: number;
@@ -241,7 +241,10 @@ export const geminiApi = {
     return response.data;
   },
 
-  searchWeb: async (query: string, maxDaysOld: number = 7): Promise<{ success: boolean; data: GeminiSearchResult }> => {
+  searchWeb: async (
+    query: string,
+    maxDaysOld: number = 7
+  ): Promise<{ success: boolean; data: GeminiSearchResult }> => {
     const response = await api.post("/gemini/search", { query, maxDaysOld });
     return response.data;
   },
@@ -263,34 +266,56 @@ export const geminiApi = {
 
 // Analytics APIs
 export const analyticsApi = {
-  // Word Frequency
-  generateWordFrequency: async (limit: number = 10) => {
-    const response = await api.post("/analytics/wordfrequency/generate", { limit });
+  // Word Frequency (Gemini AI powered)
+  generateWordFrequency: async (limit: number = 50) => {
+    const response = await api.post("/analytics/wordfrequency/generate", {
+      limit: 10,
+    });
     return response.data;
   },
 
-  getLatestWordFrequency: async (): Promise<{ success: boolean; data: WordFrequency | null }> => {
+  getLatestWordFrequency: async (): Promise<{
+    success: boolean;
+    data: WordFrequency | null;
+  }> => {
     const response = await api.get("/analytics/wordfrequency/latest");
     return response.data;
   },
 
   // Reports
-  generateReport: async (type: 'daily' | 'weekly' | 'monthly', date?: string) => {
-    const response = await api.post("/analytics/report/generate", { type, date });
+  generateReport: async (
+    type: "daily" | "weekly" | "monthly",
+    date?: string
+  ) => {
+    const response = await api.post("/analytics/report/generate", {
+      type,
+      date,
+    });
     return response.data;
   },
 
-  getLatestReport: async (type: 'daily' | 'weekly' | 'monthly'): Promise<{ success: boolean; data: Report | null }> => {
-    const response = await api.get("/analytics/report/latest", { params: { type } });
+  getLatestReport: async (
+    type: "daily" | "weekly" | "monthly"
+  ): Promise<{ success: boolean; data: Report | null }> => {
+    const response = await api.get("/analytics/report/latest", {
+      params: { type },
+    });
     return response.data;
   },
 
-  getReportHistory: async (type: 'daily' | 'weekly' | 'monthly', limit: number = 10): Promise<{ success: boolean; data: ReportHistory[] }> => {
-    const response = await api.get("/analytics/report/history", { params: { type, limit } });
+  getReportHistory: async (
+    type: "daily" | "weekly" | "monthly",
+    limit: number = 10
+  ): Promise<{ success: boolean; data: ReportHistory[] }> => {
+    const response = await api.get("/analytics/report/history", {
+      params: { type, limit },
+    });
     return response.data;
   },
 
-  getReportById: async (id: string): Promise<{ success: boolean; data: Report | null }> => {
+  getReportById: async (
+    id: string
+  ): Promise<{ success: boolean; data: Report | null }> => {
     const response = await api.get(`/analytics/report/${id}`);
     return response.data;
   },
