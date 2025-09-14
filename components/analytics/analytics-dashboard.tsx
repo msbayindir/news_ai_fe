@@ -26,15 +26,6 @@ export function AnalyticsDashboard() {
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
-  // Fetch word frequency
-  const {
-    data: wordFrequency,
-    isLoading: wordFreqLoading,
-    refetch: refetchWordFreq,
-  } = useQuery({
-    queryKey: ["wordFrequency"],
-    queryFn: analyticsApi.getLatestWordFrequency,
-  });
 
   // Fetch latest report
   const {
@@ -60,13 +51,6 @@ export function AnalyticsDashboard() {
     enabled: !!selectedReportId,
   });
 
-  // Generate word frequency mutation
-  const generateWordFreqMutation = useMutation({
-    mutationFn: () => analyticsApi.generateWordFrequency(50),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["wordFrequency"] });
-    },
-  });
 
   // Generate report mutation
   const generateReportMutation = useMutation({
@@ -78,9 +62,6 @@ export function AnalyticsDashboard() {
     },
   });
 
-  const handleGenerateWordFrequency = () => {
-    generateWordFreqMutation.mutate(); // Use 50 articles for Gemini xanalysis
-  };
 
   const handleGenerateReport = (type: "daily" | "weekly" | "monthly") => {
     generateReportMutation.mutate(type);
@@ -95,91 +76,24 @@ export function AnalyticsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">
+          <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
+          <p className="text-gray-600 mt-1">
             Haber analizleri ve raporlar
           </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={() => refetchWordFreq()} variant="outline" size="sm">
+          <Button onClick={() => refetchReport()} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Yenile
           </Button>
         </div>
       </div>
 
-      {/* Word Frequency Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              Gemini AI Kelime Analizi
-            </CardTitle>
-            <Button
-              onClick={handleGenerateWordFrequency}
-              disabled={generateWordFreqMutation.isPending}
-              size="sm"
-            >
-              {generateWordFreqMutation.isPending ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Analiz Ediliyor...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Yeni Analiz
-                </>
-              )}
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {wordFreqLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-          ) : wordFrequency?.data ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <span>
-                  {wordFrequency.data.articleCount} haber Gemini AI ile analiz
-                  edildi
-                </span>
-                <span>
-                  {format(
-                    new Date(wordFrequency.data.createdAt),
-                    "d MMMM yyyy HH:mm",
-                    { locale: tr }
-                  )}
-                </span>
-              </div>
-              <WordCloud
-                words={wordFrequency.data.words}
-                title="Gemini AI Kelime Analizi"
-              />
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-              <AlertCircle className="h-12 w-12 mb-4" />
-              <p>Henüz kelime frekansı analizi yapılmamış</p>
-              <Button
-                onClick={handleGenerateWordFrequency}
-                className="mt-4"
-                size="sm"
-              >
-                İlk Analizi Başlat
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Reports Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-black">
             <Calendar className="h-5 w-5" />
             AI Raporları
           </CardTitle>
@@ -226,7 +140,7 @@ export function AnalyticsDashboard() {
                   {/* Latest Report */}
                   {latestReport?.data && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3">
+                      <h3 className="text-lg font-semibold mb-3 text-black">
                         En Son Rapor
                       </h3>
                       <ReportCard
@@ -240,7 +154,7 @@ export function AnalyticsDashboard() {
                   {/* Report History */}
                   {reportHistory?.data && reportHistory.data.length > 0 && (
                     <div>
-                      <h3 className="text-lg font-semibold mb-3">
+                      <h3 className="text-lg font-semibold mb-3 text-black">
                         Rapor Geçmişi
                       </h3>
                       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
