@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { Newspaper, Search, Home, MapPin, Menu, X } from "lucide-react";
+import { Newspaper, Search, Home, MapPin, Menu, X, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Ana Sayfa", icon: Home },
   { href: "/search", label: "Arama", icon: Search },
+  { href: "/analytics", label: "Analitik", icon: BarChart3 },
 ];
 
 export function Navbar() {
