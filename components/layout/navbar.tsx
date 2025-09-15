@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { Newspaper, Search, Home, MapPin, Menu, X, BarChart3, LogOut, User } from "lucide-react";
+import { Search, Home, MapPin, Menu, X, BarChart3, LogOut, User, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -25,15 +25,20 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <nav className="sticky top-0 z-[100] w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <Newspaper className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold">News AI</span>
+        <div className="flex h-14 items-center justify-between">
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Activity className="h-4 w-4 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-gray-900">News AI</span>
+              <span className="text-xs text-gray-500 -mt-1">Gaziantep Haberleri</span>
+            </div>
           </Link>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -43,14 +48,14 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                    "flex items-center space-x-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-200",
                     isActive
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      ? "bg-blue-50 text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   )}
                 >
                   <Icon className="h-4 w-4" />
-                  <span>{item.label}</span>
+                  <span className="hidden lg:block">{item.label}</span>
                 </Link>
               );
             })}
@@ -58,28 +63,30 @@ export function Navbar() {
             {/* Şehitkamil Quick Search Button */}
             <button
               onClick={handleSehitkamilSearch}
-              className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors ml-2"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm hover:shadow-md ml-2"
             >
               <MapPin className="h-4 w-4" />
-              <span>Şehitkamil Haberleri</span>
+              <span className="text-sm font-medium">Şehitkamil</span>
             </button>
 
             {/* User Menu */}
             {user && (
-              <div className="flex items-center space-x-2 ml-4 pl-4 border-l">
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <User className="h-4 w-4" />
-                  <span>{user.username}</span>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+              <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
+                <div className="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-full">
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <User className="h-3 w-3 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{user.username}</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                     {user.role}
                   </span>
                 </div>
                 <button
                   onClick={logout}
-                  className="flex items-center space-x-1 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>Çıkış</span>
+                  <span className="text-sm">Çıkış</span>
                 </button>
               </div>
             )}
@@ -89,12 +96,12 @@ export function Navbar() {
           <div className="flex md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100"
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 text-gray-600" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-5 w-5 text-gray-600" />
               )}
             </button>
           </div>
@@ -102,8 +109,8 @@ export function Navbar() {
 
         {/* Mobile menu dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm">
+            <div className="px-3 pt-3 pb-4 space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -114,10 +121,10 @@ export function Navbar() {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium transition-colors",
+                      "flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-medium transition-all duration-200",
                       isActive
-                        ? "bg-blue-100 text-blue-700"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        ? "bg-blue-50 text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -129,28 +136,30 @@ export function Navbar() {
               {/* Şehitkamil Quick Search Button for Mobile */}
               <button
                 onClick={handleSehitkamilSearch}
-                className="w-full flex items-center space-x-3 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="w-full flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm"
               >
                 <MapPin className="h-5 w-5" />
-                <span>Şehitkamil Haberleri</span>
+                <span className="font-medium">Şehitkamil Haberleri</span>
               </button>
 
               {/* Mobile User Menu */}
               {user && (
-                <div className="border-t pt-3 mt-3">
-                  <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 rounded-lg mb-2">
-                    <User className="h-5 w-5 text-gray-600" />
+                <div className="border-t border-gray-100 pt-3 mt-3">
+                  <div className="flex items-center space-x-3 px-4 py-3 bg-gray-50 rounded-xl mb-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
                     <div>
                       <p className="font-medium text-gray-900">{user.username}</p>
-                      <p className="text-xs text-blue-600">{user.role}</p>
+                      <p className="text-xs text-blue-600 font-medium">{user.role}</p>
                     </div>
                   </div>
                   <button
                     onClick={logout}
-                    className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
                   >
                     <LogOut className="h-5 w-5" />
-                    <span>Çıkış Yap</span>
+                    <span className="font-medium">Çıkış Yap</span>
                   </button>
                 </div>
               )}
