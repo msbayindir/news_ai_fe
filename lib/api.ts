@@ -214,7 +214,7 @@ export const articleApi = {
     const response = await api.get("/articles/search", {
       params: { q: query, limit },
     });
-    return response.data;
+    return response.data.data;
   },
 
   getStatistics: async () => {

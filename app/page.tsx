@@ -8,8 +8,6 @@ import { SkeletonCard } from "@/components/skeleton-card";
 import { SidebarWordCloud } from "@/components/sidebar-word-cloud";
 import { ProtectedRoute } from "@/components/protected-route";
 import {
-  Loader2,
-  RefreshCw,
   Newspaper,
   Clock,
   Menu,
@@ -19,16 +17,23 @@ import {
   Briefcase,
   Heart,
   Zap,
-  GraduationCap,
-  Trophy,
-  Car,
-  HomeIcon,
-  Shield,
-  Landmark,
   Users,
+  Building,
+  Car,
+  Gamepad2,
+  Palette,
+  Music,
+  Plane,
+  GraduationCap,
+  Activity,
+  MapPin,
   TrendingUp,
+  Landmark,
+  Trophy,
+  Home as HomeIcon,
+  Shield,
 } from "lucide-react";
-import { STANDARD_CATEGORIES, DEFAULT_CATEGORIES } from "@/lib/constants";
+import { STANDARD_CATEGORIES } from "@/lib/constants";
 import { SentimentChart } from "@/components/sentiment-chart";
 
 export default function Home() {
@@ -38,10 +43,8 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Check if we should open sidebar on mount (for mobile category link)
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("showCategories") === "true" && window.innerWidth < 1024) {
@@ -80,22 +83,6 @@ export default function Home() {
     queryFn: articleApi.getStatistics,
   });
 
-  // Fetch new articles mutation
-  const fetchNewArticlesMutation = useMutation({
-    mutationFn: () =>
-      fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL ||
-          "https://brief-jaybird-allowed.ngrok-free.app"
-        }/api/feeds/fetch-all`,
-        {
-          method: "POST",
-        }
-      ),
-    onSuccess: () => {
-      refetch();
-    },
-  });
 
   const handleCategoryClick = (category: string) => {
     setShowLatest(false);

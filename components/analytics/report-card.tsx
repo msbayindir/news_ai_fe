@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Button } from "../ui/button";
-import { Calendar, FileText, TrendingUp, Eye } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, TrendingUp, Users, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import type { Report, ReportHistory } from "@/lib/api";
