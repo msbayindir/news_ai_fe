@@ -42,7 +42,7 @@ export default function Home() {
     queryKey: ["articles", page, selectedCategory, showLatest],
     queryFn: () => {
       if (showLatest) {
-        return articleApi.getLatestArticles(20);
+        return articleApi.getLatestArticles(50);
       }
       return articleApi.getArticles({
         page,
