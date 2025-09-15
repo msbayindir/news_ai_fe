@@ -1,35 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/auth-context';
-import { Loader2, Eye, EyeOff, Newspaper } from 'lucide-react';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
+import { Loader2, Eye, EyeOff, Newspaper } from "lucide-react";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  
+  const [error, setError] = useState("");
+
   const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
       const result = await login(username, password);
-      
+
       if (result.success) {
-        router.push('/');
+        router.push("/");
       } else {
-        setError(result.error || 'Giriş başarısız');
+        setError(result.error || "Giriş başarısız");
       }
     } catch (error) {
-      setError('Beklenmeyen bir hata oluştu');
+      setError("Beklenmeyen bir hata oluştu");
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +49,7 @@ export default function LoginPage() {
             Haber platformuna erişim için giriş yapmanız gerekiyor
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Şifre"
@@ -112,7 +112,7 @@ export default function LoginPage() {
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                'Giriş Yap'
+                "Giriş Yap"
               )}
             </button>
           </div>
@@ -121,9 +121,9 @@ export default function LoginPage() {
             <div className="text-sm text-gray-600">
               <p className="mb-2">Test hesapları:</p>
               <div className="space-y-1 text-xs">
-                <p><strong>Admin:</strong> admin / admin123</p>
-                <p><strong>Editor:</strong> editor / editor123</p>
-                <p><strong>Viewer:</strong> viewer / viewer123</p>
+                <p>
+                  <strong>Kullanıcı adı:</strong> test / <strong>Şifre:</strong> test123
+                </p>
               </div>
             </div>
           </div>
