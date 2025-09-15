@@ -326,7 +326,7 @@ export default function Home() {
 
           {/* Pagination */}
           {data?.data?.pagination && !showLatest && (
-            <div className="flex justify-center items-center gap-2">
+            <div className="flex justify-center items-center gap-2 text-black">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
