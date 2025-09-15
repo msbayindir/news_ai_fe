@@ -96,11 +96,11 @@ export function ReportCard({ report, onViewDetails, showFullContent = false }: R
               </div>
             </div>
 
-            {(report as Report).analysis && (
+            {(report as Report).analysis && (report as Report).analysis.sourceDistribution && (
               <div className="border-t pt-4 text-black">
                 <h4 className="font-semibold mb-2">Kaynak Dağılımı</h4>
                 <div className="space-y-2">
-                  {Object.entries((report as Report).analysis.sourceDistribution).map(([source, count]) => (
+                  {Object.entries((report as Report).analysis.sourceDistribution || {}).map(([source, count]) => (
                     <div key={source} className="flex justify-between text-sm">
                       <span className="text-gray-700">{source}</span>
                       <span className="font-medium text-gray-900">{count}</span>
