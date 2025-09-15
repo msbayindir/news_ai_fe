@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Navbar } from "@/components/layout/navbar";
+import { ConditionalNavbar } from "@/components/conditional-navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="tr">
       <body className={`${inter.className} antialiased bg-gray-50`}>
         <Providers>
-          <Navbar />
+          <ConditionalNavbar />
           <main className="min-h-screen">
             {children}
           </main>

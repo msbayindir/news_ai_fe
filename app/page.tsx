@@ -6,6 +6,7 @@ import { articleApi, Article } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
 import { SkeletonCard } from "@/components/skeleton-card";
 import { SidebarWordCloud } from "@/components/sidebar-word-cloud";
+import { ProtectedRoute } from "@/components/protected-route";
 import {
   Loader2,
   RefreshCw,
@@ -132,7 +133,8 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-50">
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
@@ -274,29 +276,7 @@ export default function Home() {
                 ? selectedCategory
                 : "Gaziantep Haberleri"}
             </h1>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => fetchNewArticlesMutation.mutate()}
-                disabled={fetchNewArticlesMutation.isPending}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm sm:text-base"
-              >
-                {fetchNewArticlesMutation.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Newspaper className="h-4 w-4" />
-                )}
-                <span className="hidden sm:inline">Yeni Haberler</span>
-              </button>
-              <button
-                onClick={() => refetch()}
-                disabled={isLoading}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <RefreshCw
-                  className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`}
-                />
-              </button>
-            </div>
+
           </div>
 
           {/* Articles Grid */}
@@ -354,6 +334,7 @@ export default function Home() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }

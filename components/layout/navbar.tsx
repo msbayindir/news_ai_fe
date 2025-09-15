@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { Newspaper, Search, Home, MapPin, Menu, X, BarChart3 } from "lucide-react";
+import { Newspaper, Search, Home, MapPin, Menu, X, BarChart3, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/auth-context";
 
 const navItems = [
   { href: "/", label: "Ana Sayfa", icon: Home },
@@ -16,6 +17,7 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const handleSehitkamilSearch = () => {
     router.push("/search?q=Şehitkamil&auto=true");
@@ -61,6 +63,26 @@ export function Navbar() {
               <MapPin className="h-4 w-4" />
               <span>Şehitkamil Haberleri</span>
             </button>
+
+            {/* User Menu */}
+            {user && (
+              <div className="flex items-center space-x-2 ml-4 pl-4 border-l">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <User className="h-4 w-4" />
+                  <span>{user.username}</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                    {user.role}
+                  </span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="flex items-center space-x-1 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Çıkış</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -112,6 +134,26 @@ export function Navbar() {
                 <MapPin className="h-5 w-5" />
                 <span>Şehitkamil Haberleri</span>
               </button>
+
+              {/* Mobile User Menu */}
+              {user && (
+                <div className="border-t pt-3 mt-3">
+                  <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 rounded-lg mb-2">
+                    <User className="h-5 w-5 text-gray-600" />
+                    <div>
+                      <p className="font-medium text-gray-900">{user.username}</p>
+                      <p className="text-xs text-blue-600">{user.role}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Çıkış Yap</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

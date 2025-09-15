@@ -1,5 +1,7 @@
 "use client";
 
+import { ProtectedRoute } from "@/components/protected-route";
+
 import { useState, useEffect, Suspense } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -107,7 +109,8 @@ function SearchContent() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-4 sm:py-8">
         <div className="max-w-6xl mx-auto">
           {/* Back Button */}
@@ -353,7 +356,8 @@ function SearchContent() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }
 

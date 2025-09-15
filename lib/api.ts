@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "./config";
+import { tokenStorage } from "./auth";
 
 const api = axios.create({
   baseURL: `${API_URL}/api`,
@@ -8,6 +9,31 @@ const api = axios.create({
     "ngrok-skip-browser-warning": "true",
   },
 });
+
+// Add auth token to requests
+api.interceptors.request.use((config) => {
+  const token = tokenStorage.get();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle auth errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid, clear auth data
+      tokenStorage.remove();
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_user');
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Types
 export interface Article {
