@@ -84,8 +84,8 @@ function SearchContent() {
     mutationFn: (query: string) => articleApi.searchArticles(query, 20),
     onSuccess: (data) => {
       console.log("Search API Response:", data);
-      // API response'da data doğrudan array olarak geliyor
-      setLocalResults(data.data || []);
+      // searchArticles fonksiyonu zaten response.data.data döndürüyor
+      setLocalResults(data || []);
     },
   });
 
