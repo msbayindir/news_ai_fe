@@ -16,14 +16,12 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-
 export function AnalyticsDashboard() {
   const [selectedReportType, setSelectedReportType] = useState<
     "daily" | "weekly" | "monthly"
   >("daily");
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-
 
   // Fetch latest report
   const {
@@ -49,7 +47,6 @@ export function AnalyticsDashboard() {
     enabled: !!selectedReportId,
   });
 
-
   // Generate report mutation
   const generateReportMutation = useMutation({
     mutationFn: (type: "daily" | "weekly" | "monthly") =>
@@ -59,7 +56,6 @@ export function AnalyticsDashboard() {
       queryClient.invalidateQueries({ queryKey: ["reportHistory"] });
     },
   });
-
 
   const handleGenerateReport = (type: "daily" | "weekly" | "monthly") => {
     generateReportMutation.mutate(type);
@@ -74,19 +70,12 @@ export function AnalyticsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-600 mt-1">
-            Haber analizleri ve raporlar
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={() => refetchReport()} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Yenile
-          </Button>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Analytics Dashboard
+          </h1>
+          <p className="text-gray-600 mt-1">Haber analizleri ve raporlar</p>
         </div>
       </div>
-
 
       {/* Reports Section */}
       <Card>
@@ -118,7 +107,9 @@ export function AnalyticsDashboard() {
                 {generateReportMutation.isPending ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin text-black" />
-                    <span className="hidden sm:inline">Rapor Oluşturuluyor...</span>
+                    <span className="hidden sm:inline">
+                      Rapor Oluşturuluyor...
+                    </span>
                     <span className="sm:hidden">Oluşturuluyor...</span>
                   </>
                 ) : (
