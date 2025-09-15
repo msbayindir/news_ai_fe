@@ -91,8 +91,40 @@ export function ReportCard({ report, onViewDetails, showFullContent = false }: R
                 <TrendingUp className="h-4 w-4" />
                 AI Özeti
               </h4>
-              <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                {(report as Report).summary}
+              <div className="text-sm text-gray-700 prose prose-sm max-w-none">
+                {(report as Report).summary
+                  ?.replace(/```json[\s\S]*?```/g, '') // Remove JSON blocks
+                  ?.split('\n')
+                  .map((line, index) => {
+                    // Handle headers
+                    if (line.startsWith('### ')) {
+                      return <h3 key={index} className="text-lg font-bold text-gray-900 mt-6 mb-3">{line.replace('### ', '')}</h3>;
+                    }
+                    if (line.startsWith('#### ')) {
+                      return <h4 key={index} className="text-base font-semibold text-gray-800 mt-4 mb-2">{line.replace('#### ', '')}</h4>;
+                    }
+                    // Handle bold text
+                    if (line.startsWith('**') && line.endsWith('**')) {
+                      return <p key={index} className="font-semibold text-gray-800 mt-3 mb-2">{line.replace(/\*\*/g, '')}</p>;
+                    }
+                    // Handle bullet points
+                    if (line.trim().startsWith('*   ')) {
+                      return <li key={index} className="ml-4 mb-1 text-gray-700">{line.replace('*   ', '')}</li>;
+                    }
+                    if (line.trim().startsWith('* ')) {
+                      return <li key={index} className="ml-4 mb-1 text-gray-700">{line.replace('* ', '')}</li>;
+                    }
+                    // Handle horizontal rules
+                    if (line.trim() === '---') {
+                      return <hr key={index} className="my-4 border-gray-300" />;
+                    }
+                    // Handle empty lines
+                    if (line.trim() === '') {
+                      return <br key={index} />;
+                    }
+                    // Regular paragraphs
+                    return <p key={index} className="mb-2 leading-relaxed">{line}</p>;
+                  })}
               </div>
             </div>
 

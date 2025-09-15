@@ -28,6 +28,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { STANDARD_CATEGORIES, DEFAULT_CATEGORIES } from "@/lib/constants";
+import { SentimentChart } from "@/components/sentiment-chart";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -173,30 +174,10 @@ export default function Home() {
               <span className="font-medium">En Son Haberler</span>
               {showLatest && <Check className="h-4 w-4 ml-auto" />}
             </button>
-
-            {/* Statistics */}
-            {statsData && (
-              <div className="space-y-2 mb-4 pb-4 border-b">
-                <div className="px-4 py-2 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {statsData.data.totalArticles}
-                  </div>
-                  <div className="text-xs text-gray-600">Toplam Haber</div>
-                </div>
-                <div className="px-4 py-2 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
-                    {statsData.data.totalCategories}
-                  </div>
-                  <div className="text-xs text-gray-600">Kategori</div>
-                </div>
-                <div className="px-4 py-2 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600">
-                    {statsData.data.totalSources}
-                  </div>
-                  <div className="text-xs text-gray-600">Haber Kaynağı</div>
-                </div>
-              </div>
-            )}
+    {/* Sentiment Chart */}
+    <SentimentChart />
+            
+          
 
             <div className="border-t pt-2 mt-2">
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-4">
@@ -243,9 +224,32 @@ export default function Home() {
                 );
               })}
             </div>
-
+           
             {/* Word Cloud */}
             <SidebarWordCloud />
+              {/* Statistics */}
+              {statsData && (
+              <div className="space-y-2 mb-4 pb-4 border-b">
+                <div className="px-4 py-2 bg-gray-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">
+                    {statsData.data.totalArticles}
+                  </div>
+                  <div className="text-xs text-gray-600">Toplam Haber</div>
+                </div>
+                <div className="px-4 py-2 bg-gray-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">
+                    {statsData.data.totalCategories}
+                  </div>
+                  <div className="text-xs text-gray-600">Kategori</div>
+                </div>
+                <div className="px-4 py-2 bg-gray-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">
+                    {statsData.data.totalSources}
+                  </div>
+                  <div className="text-xs text-gray-600">Haber Kaynağı</div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

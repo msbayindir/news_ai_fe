@@ -103,7 +103,7 @@ export function AnalyticsDashboard() {
               setSelectedReportType(v as "daily" | "weekly" | "monthly")
             }
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 text-black">
               <TabsList>
                 <TabsTrigger value="daily">Günlük</TabsTrigger>
                 <TabsTrigger value="weekly">Haftalık</TabsTrigger>
@@ -116,12 +116,12 @@ export function AnalyticsDashboard() {
               >
                 {generateReportMutation.isPending ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin text-black" />
                     Rapor Oluşturuluyor...
                   </>
                 ) : (
                   <>
-                    <Download className="h-4 w-4 mr-2" />
+                    <Download className="h-4 w-4 mr-2 text-black" />
                     Yeni Rapor Oluştur
                   </>
                 )}
