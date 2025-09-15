@@ -85,13 +85,18 @@ export default function LoginPage() {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center z-20 hover:bg-gray-100 rounded-full w-8 h-8 justify-center items-center transition-colors"
+                onMouseDown={(e) => {
+                  e.preventDefault(); // Focus kaybını önler
+                }}
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+                tabIndex={0}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
                 )}
               </button>
             </div>
