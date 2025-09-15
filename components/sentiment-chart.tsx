@@ -1,15 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { analyticsApi } from "@/lib/api";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Calendar } from "lucide-react";
 
 export function SentimentChart() {
+  const [reportType, setReportType] = useState<"daily" | "weekly" | "monthly">(
+    "weekly"
+  );
+
   const { data: reportData, isLoading } = useQuery({
-    queryKey: ["latest-report"],
-    queryFn: () => analyticsApi.getLatestReport("weekly"),
+    queryKey: ["latest-report", reportType],
+    queryFn: () => analyticsApi.getLatestReport(reportType),
   });
 
   // Extract sentiment data from report summary using regex
@@ -44,12 +48,28 @@ export function SentimentChart() {
     ? sentimentData.positive + sentimentData.negative + sentimentData.neutral
     : 0;
 
+  const getReportTypeLabel = (type: "daily" | "weekly" | "monthly") => {
+    switch (type) {
+      case "daily":
+        return "Günlük";
+      case "weekly":
+        return "Haftalık";
+      case "monthly":
+        return "Aylık";
+      default:
+        return "Haftalık";
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <h3 className="text-sm font-semibold text-gray-800 mb-3">
-          Haber Duygu Analizi
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-gray-800">
+            Haber Duygu Analizi
+          </h3>
+          <Calendar className="h-4 w-4 text-gray-400" />
+        </div>
         <div className="animate-pulse">
           <div className="h-32 bg-gray-200 rounded mb-3"></div>
           <div className="space-y-2">
@@ -64,9 +84,22 @@ export function SentimentChart() {
   if (!sentimentData || total === 0) {
     return (
       <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <h3 className="text-sm font-semibold text-gray-800 mb-3">
-          Haber Duygu Analizi
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-gray-800">
+            Haber Duygu Analizi
+          </h3>
+          <select
+            value={reportType}
+            onChange={(e) =>
+              setReportType(e.target.value as "daily" | "weekly" | "monthly")
+            }
+            className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black"
+          >
+            <option value="daily">Günlük</option>
+            <option value="weekly">Haftalık</option>
+            <option value="monthly">Aylık</option>
+          </select>
+        </div>
         <div className="text-center py-8">
           <p className="text-gray-500 text-sm">Veri bulunamadı</p>
         </div>
@@ -76,10 +109,23 @@ export function SentimentChart() {
 
   return (
     <div className="bg-white rounded-lg p-4 shadow-sm border">
-      <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-        <TrendingUp className="h-4 w-4" />
-        Haber Duygu Analizi
-      </h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4" />
+          Haber Duygu Analizi
+        </h3>
+        <select
+          value={reportType}
+          onChange={(e) =>
+            setReportType(e.target.value as "daily" | "weekly" | "monthly")
+          }
+          className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black ml-1"
+        >
+          <option value="daily">Günlük</option>
+          <option value="weekly">Haftalık</option>
+          <option value="monthly">Aylık</option>
+        </select>
+      </div>
 
       {/* Chart */}
       <div className="h-32 mb-3">
@@ -159,7 +205,7 @@ export function SentimentChart() {
 
       <div className="mt-3 pt-3 border-t">
         <div className="text-xs text-gray-500 text-center">
-          Toplam {total} haber analiz edildi
+          {getReportTypeLabel(reportType)} - Toplam {total} haber analiz edildi
         </div>
       </div>
     </div>
