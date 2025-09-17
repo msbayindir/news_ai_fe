@@ -243,9 +243,6 @@ function SearchContent() {
                   </div>
                 ) : localResults.length > 0 ? (
                   <>
-                    <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                      Veritabanı Sonuçları ({localResults.length})
-                    </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       {localResults.map((article) => (
                         <ArticleCard key={article.id} article={article} />
