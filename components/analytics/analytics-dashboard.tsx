@@ -142,50 +142,6 @@ export function AnalyticsDashboard() {
                       />
                     </div>
                   )}
-
-                  {/* Report History */}
-                  {reportHistory?.data && reportHistory.data.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-black">
-                        Rapor Geçmişi
-                      </h3>
-                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {reportHistory.data.map((report) => (
-                          <ReportCard
-                            key={report.id}
-                            report={report}
-                            onViewDetails={handleViewReportDetails}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {!latestReport?.data &&
-                    (!reportHistory?.data ||
-                      reportHistory.data.length === 0) && (
-                      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                        <AlertCircle className="h-12 w-12 mb-4" />
-                        <p>
-                          Henüz{" "}
-                          {selectedReportType === "daily"
-                            ? "günlük"
-                            : selectedReportType === "weekly"
-                            ? "haftalık"
-                            : "aylık"}{" "}
-                          rapor oluşturulmamış
-                        </p>
-                        <Button
-                          onClick={() =>
-                            handleGenerateReport(selectedReportType)
-                          }
-                          className="mt-4"
-                          size="sm"
-                        >
-                          İlk Raporu Oluştur
-                        </Button>
-                      </div>
-                    )}
                 </>
               )}
             </TabsContent>
