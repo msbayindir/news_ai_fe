@@ -3,7 +3,17 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { Search, Home, MapPin, Menu, X, BarChart3, LogOut, User, Activity } from "lucide-react";
+import {
+  Search,
+  Home,
+  MapPin,
+  Menu,
+  X,
+  BarChart3,
+  LogOut,
+  User,
+  Activity,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -34,7 +44,9 @@ export function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-bold text-gray-900">News AI</span>
-              <span className="text-xs text-gray-500 -mt-1">Gaziantep Haberleri</span>
+              <span className="text-xs text-gray-500 -mt-1">
+                Gaziantep Haberleri
+              </span>
             </div>
           </Link>
 
@@ -61,7 +73,7 @@ export function Navbar() {
             })}
 
             {/* Şehitkamil Quick Search Button - Hidden for username "gaziantep" */}
-            {user?.username !== 'gaziantep' && (
+            {user?.username !== "gaziantep" && (
               <button
                 onClick={handleSehitkamilSearch}
                 className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm hover:shadow-md ml-2"
@@ -78,7 +90,9 @@ export function Navbar() {
                   <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                     <User className="h-3 w-3 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{user.username}</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    {user.username}
+                  </span>
                   <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
                     {user.role}
                   </span>
@@ -136,7 +150,7 @@ export function Navbar() {
               })}
 
               {/* Şehitkamil Quick Search Button for Mobile - Hidden for username "gaziantep" */}
-              {user?.username !== 'gaziantep' && (
+              {user?.username !== "gaziantep" && (
                 <button
                   onClick={handleSehitkamilSearch}
                   className="w-full flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm"
@@ -154,8 +168,12 @@ export function Navbar() {
                       <User className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{user.username}</p>
-                      <p className="text-xs text-blue-600 font-medium">{user.role}</p>
+                      <p className="font-medium text-gray-900">
+                        {user.username}
+                      </p>
+                      <p className="text-xs text-blue-600 font-medium">
+                        {user.role}
+                      </p>
                     </div>
                   </div>
                   <button
