@@ -165,7 +165,8 @@ function SearchContent() {
                   <button
                     onClick={handleSearch}
                     disabled={
-                      localSearchMutation.isPending || webSearchMutation.isPending
+                      localSearchMutation.isPending ||
+                      webSearchMutation.isPending
                     }
                     className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                   >
@@ -217,7 +218,9 @@ function SearchContent() {
                       <input
                         type="number"
                         value={maxDaysOld}
-                        onChange={(e) => setMaxDaysOld(parseInt(e.target.value))}
+                        onChange={(e) =>
+                          setMaxDaysOld(parseInt(e.target.value))
+                        }
                         min="1"
                         max="30"
                         className="w-16 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
