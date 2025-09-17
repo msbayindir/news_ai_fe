@@ -130,7 +130,8 @@ export function ReportCard({
                     if (
                       line.includes("**6. Sayısal Analiz**") ||
                       line.includes("6. Sayısal Analiz")||
-                      line.includes("**6. Duygu Analizi (JSON Çıktısı)**")
+                      line.includes("**6. Duygu Analizi (JSON Çıktısı)**")||
+                      line.includes("6. Haber Sayısal Analizi (JSON Çıktısı)")
                     ) {
                       skipLines = true;
                       break;

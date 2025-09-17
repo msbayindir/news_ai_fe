@@ -81,7 +81,7 @@ function SearchContent() {
 
   // Local search mutation
   const localSearchMutation = useMutation({
-    mutationFn: (query: string) => articleApi.searchArticles(query, 20),
+    mutationFn: (query: string) => articleApi.searchArticles(query, 100),
     onSuccess: (data) => {
       console.log("Search API Response:", data);
       // searchArticles fonksiyonu zaten response.data.data döndürüyor
@@ -129,6 +129,9 @@ function SearchContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // Check if this is an auto search from navbar (hide search form)
+  const isAutoSearch = searchParams.get("auto") === "true";
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
@@ -144,85 +147,87 @@ function SearchContent() {
             </Link>
 
             <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900">
-              Haber Ara
+              {isAutoSearch ? "Şehitkamil Haberleri" : "Haber Ara"}
             </h1>
 
-            {/* Search Form */}
-            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
-              <div className="flex flex-col md:flex-row gap-3 sm:gap-4 mb-4">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                  placeholder="Arama terimi girin..."
-                  className="flex-1 px-4 py-3 border border-gray-200 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
-                />
-                <button
-                  onClick={handleSearch}
-                  disabled={
-                    localSearchMutation.isPending || webSearchMutation.isPending
-                  }
-                  className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                >
-                  {localSearchMutation.isPending ||
-                  webSearchMutation.isPending ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <Search className="h-5 w-5" />
-                  )}
-                  Ara
-                </button>
-              </div>
+            {/* Search Form - Only show if not auto search */}
+            {!isAutoSearch && (
+              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+                <div className="flex flex-col md:flex-row gap-3 sm:gap-4 mb-4">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    placeholder="Arama terimi girin..."
+                    className="flex-1 px-4 py-3 border border-gray-200 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                  />
+                  <button
+                    onClick={handleSearch}
+                    disabled={
+                      localSearchMutation.isPending || webSearchMutation.isPending
+                    }
+                    className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                  >
+                    {localSearchMutation.isPending ||
+                    webSearchMutation.isPending ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Search className="h-5 w-5" />
+                    )}
+                    Ara
+                  </button>
+                </div>
 
-              {/* Search Type Selector */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    value="local"
-                    checked={searchType === "local"}
-                    onChange={(e) =>
-                      setSearchType(e.target.value as "local" | "web")
-                    }
-                    className="text-gray-600"
-                  />
-                  <Database className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">
-                    Veritabanında Ara
-                  </span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    value="web"
-                    checked={searchType === "web"}
-                    onChange={(e) =>
-                      setSearchType(e.target.value as "local" | "web")
-                    }
-                    className="text-gray-600"
-                  />
-                  <Globe className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">
-                    Web&apos;de Ara (AI)
-                  </span>
-                </label>
-                {searchType === "web" && (
-                  <div className="ml-auto flex items-center gap-2">
-                    <label className="text-sm text-gray-500">Son</label>
+                {/* Search Type Selector */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
-                      type="number"
-                      value={maxDaysOld}
-                      onChange={(e) => setMaxDaysOld(parseInt(e.target.value))}
-                      min="1"
-                      max="30"
-                      className="w-16 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      type="radio"
+                      value="local"
+                      checked={searchType === "local"}
+                      onChange={(e) =>
+                        setSearchType(e.target.value as "local" | "web")
+                      }
+                      className="text-gray-600"
                     />
-                    <span className="text-sm text-gray-500">gün</span>
-                  </div>
-                )}
+                    <Database className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-700">
+                      Veritabanında Ara
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="web"
+                      checked={searchType === "web"}
+                      onChange={(e) =>
+                        setSearchType(e.target.value as "local" | "web")
+                      }
+                      className="text-gray-600"
+                    />
+                    <Globe className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-700">
+                      Web&apos;de Ara (AI)
+                    </span>
+                  </label>
+                  {searchType === "web" && (
+                    <div className="ml-auto flex items-center gap-2">
+                      <label className="text-sm text-gray-500">Son</label>
+                      <input
+                        type="number"
+                        value={maxDaysOld}
+                        onChange={(e) => setMaxDaysOld(parseInt(e.target.value))}
+                        min="1"
+                        max="30"
+                        className="w-16 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      />
+                      <span className="text-sm text-gray-500">gün</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Local Search Results */}
             {searchType === "local" && (
