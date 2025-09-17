@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, TrendingUp, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -126,8 +121,8 @@ export function ReportCard({
                     // Check if we've reached section 6 (Sayısal Analiz)
                     if (
                       line.includes("**6. Sayısal Analiz**") ||
-                      line.includes("6. Sayısal Analiz")||
-                      line.includes("**6. Duygu Analizi (JSON Çıktısı)**")||
+                      line.includes("6. Sayısal Analiz") ||
+                      line.includes("**6. Duygu Analizi (JSON Çıktısı)**") ||
                       line.includes("6. Haber Sayısal Analizi (JSON Çıktısı)")
                     ) {
                       skipLines = true;

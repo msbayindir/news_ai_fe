@@ -26,9 +26,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token expired or invalid, clear auth data
       tokenStorage.remove();
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_user');
-        window.location.href = '/login';
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth_user");
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);

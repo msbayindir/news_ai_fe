@@ -8,11 +8,7 @@ import { ReportCard } from "./report-card";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import {
-  Download,
-  Calendar,
-  Loader2,
-} from "lucide-react";
+import { Download, Calendar, Loader2 } from "lucide-react";
 
 export function AnalyticsDashboard() {
   const [selectedReportType, setSelectedReportType] = useState<
@@ -22,10 +18,7 @@ export function AnalyticsDashboard() {
   const queryClient = useQueryClient();
 
   // Fetch latest report
-  const {
-    data: latestReport,
-    isLoading: reportLoading,
-  } = useQuery({
+  const { data: latestReport, isLoading: reportLoading } = useQuery({
     queryKey: ["latestReport", selectedReportType],
     queryFn: () => analyticsApi.getLatestReport(selectedReportType),
   });
