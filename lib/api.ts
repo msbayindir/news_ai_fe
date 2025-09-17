@@ -293,7 +293,7 @@ export const geminiApi = {
 // Analytics APIs
 export const analyticsApi = {
   // Word Frequency (Gemini AI powered)
-  generateWordFrequency: async (limit: number = 50) => {
+  generateWordFrequency: async () => {
     const response = await api.post("/analytics/wordfrequency/generate", {
       limit: 10,
     });

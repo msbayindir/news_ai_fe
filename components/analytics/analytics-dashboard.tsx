@@ -9,11 +9,9 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  RefreshCw,
   Download,
   Calendar,
   Loader2,
-  AlertCircle,
 } from "lucide-react";
 
 export function AnalyticsDashboard() {
@@ -27,14 +25,13 @@ export function AnalyticsDashboard() {
   const {
     data: latestReport,
     isLoading: reportLoading,
-    refetch: refetchReport,
   } = useQuery({
     queryKey: ["latestReport", selectedReportType],
     queryFn: () => analyticsApi.getLatestReport(selectedReportType),
   });
 
   // Fetch report history
-  const { data: reportHistory, isLoading: historyLoading } = useQuery({
+  const { isLoading: historyLoading } = useQuery({
     queryKey: ["reportHistory", selectedReportType],
     queryFn: () => analyticsApi.getReportHistory(selectedReportType, 10),
   });
@@ -59,10 +56,6 @@ export function AnalyticsDashboard() {
 
   const handleGenerateReport = (type: "daily" | "weekly" | "monthly") => {
     generateReportMutation.mutate(type);
-  };
-
-  const handleViewReportDetails = (id: string) => {
-    setSelectedReportId(id);
   };
 
   return (
@@ -137,7 +130,6 @@ export function AnalyticsDashboard() {
                       </h3>
                       <ReportCard
                         report={latestReport.data}
-                        onViewDetails={handleViewReportDetails}
                         showFullContent={true}
                       />
                     </div>

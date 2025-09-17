@@ -4,24 +4,21 @@ import React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, TrendingUp, Users, FileText } from "lucide-react";
+import { Calendar, TrendingUp, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import type { Report, ReportHistory } from "@/lib/api";
 
 interface ReportCardProps {
   report: Report | ReportHistory;
-  onViewDetails?: (id: string) => void;
   showFullContent?: boolean;
 }
 
 export function ReportCard({
   report,
-  onViewDetails,
   showFullContent = false,
 }: ReportCardProps) {
   const isFullReport = "summary" in report;
@@ -114,7 +111,7 @@ export function ReportCard({
               <div className="text-sm text-gray-700 prose prose-sm max-w-none">
                 {(() => {
                   // Get the summary content and remove JSON blocks
-                  let content =
+                  const content =
                     (report as Report).summary?.replace(
                       /```json[\s\S]*?```/g,
                       ""

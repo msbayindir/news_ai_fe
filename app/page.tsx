@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { articleApi, Article } from "@/lib/api";
 import { ArticleCard } from "@/components/article-card";
@@ -18,15 +18,8 @@ import {
   Heart,
   Zap,
   Users,
-  Building,
   Car,
-  Gamepad2,
-  Palette,
-  Music,
-  Plane,
   GraduationCap,
-  Activity,
-  MapPin,
   TrendingUp,
   Landmark,
   Trophy,
@@ -56,7 +49,7 @@ export default function Home() {
   }, []);
 
   // Fetch articles based on selected category, latest, or default search
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["articles", page, selectedCategory, showLatest],
     queryFn: () => {
       if (showLatest) {

@@ -28,7 +28,7 @@ export default function LoginPage() {
       } else {
         setError(result.error || "Giriş başarısız");
       }
-    } catch (error) {
+    } catch {
       setError("Beklenmeyen bir hata oluştu");
     } finally {
       setIsLoading(false);
