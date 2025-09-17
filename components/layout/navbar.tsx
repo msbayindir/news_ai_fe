@@ -60,14 +60,16 @@ export function Navbar() {
               );
             })}
 
-            {/* Şehitkamil Quick Search Button */}
-            <button
-              onClick={handleSehitkamilSearch}
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm hover:shadow-md ml-2"
-            >
-              <MapPin className="h-4 w-4" />
-              <span className="text-sm font-medium">Şehitkamil</span>
-            </button>
+            {/* Şehitkamil Quick Search Button - Hidden for username "gaziantep" */}
+            {user?.username !== 'gaziantep' && (
+              <button
+                onClick={handleSehitkamilSearch}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm hover:shadow-md ml-2"
+              >
+                <MapPin className="h-4 w-4" />
+                <span className="text-sm font-medium">Şehitkamil</span>
+              </button>
+            )}
 
             {/* User Menu */}
             {user && (
@@ -133,14 +135,16 @@ export function Navbar() {
                 );
               })}
 
-              {/* Şehitkamil Quick Search Button for Mobile */}
-              <button
-                onClick={handleSehitkamilSearch}
-                className="w-full flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm"
-              >
-                <MapPin className="h-5 w-5" />
-                <span className="font-medium">Şehitkamil Haberleri</span>
-              </button>
+              {/* Şehitkamil Quick Search Button for Mobile - Hidden for username "gaziantep" */}
+              {user?.username !== 'gaziantep' && (
+                <button
+                  onClick={handleSehitkamilSearch}
+                  className="w-full flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 shadow-sm"
+                >
+                  <MapPin className="h-5 w-5" />
+                  <span className="font-medium">Şehitkamil Haberleri</span>
+                </button>
+              )}
 
               {/* Mobile User Menu */}
               {user && (

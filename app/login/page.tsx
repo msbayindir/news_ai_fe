@@ -121,17 +121,6 @@ export default function LoginPage() {
               )}
             </button>
           </div>
-
-          <div className="text-center">
-            <div className="text-sm text-gray-600">
-              <p className="mb-2">Test hesapları:</p>
-              <div className="space-y-1 text-xs">
-                <p>
-                  <strong>Kullanıcı adı:</strong> test / <strong>Şifre:</strong> test123
-                </p>
-              </div>
-            </div>
-          </div>
         </form>
       </div>
     </div>
