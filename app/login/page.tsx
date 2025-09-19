@@ -43,7 +43,7 @@ export default function LoginPage() {
             <Newspaper className="h-12 w-12 text-blue-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            News AI&apos;ya Giriş Yapın
+          Giriş Yapın
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Haber platformuna erişim için giriş yapmanız gerekiyor
