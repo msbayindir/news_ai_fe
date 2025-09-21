@@ -43,7 +43,6 @@ export function Navbar() {
               <Activity className="h-4 w-4 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-gray-900">News AI</span>
               <span className="text-xs text-gray-500 -mt-1">
                 Gaziantep Haberleri
               </span>
