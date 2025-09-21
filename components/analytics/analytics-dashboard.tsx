@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { analyticsApi } from "@/lib/api";
 import { WordCloud } from "./word-cloud";
 import { ReportCard } from "./report-card";
+import { EnhancedReportCard } from "./enhanced-report-card";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -121,10 +122,7 @@ export function AnalyticsDashboard() {
                       <h3 className="text-lg font-semibold mb-3 text-black">
                         En Son Rapor
                       </h3>
-                      <ReportCard
-                        report={latestReport.data}
-                        showFullContent={true}
-                      />
+                      <EnhancedReportCard report={latestReport.data} />
                     </div>
                   )}
                 </>
@@ -150,9 +148,9 @@ export function AnalyticsDashboard() {
             </div>
           </CardHeader>
           <CardContent>
-            <ReportCard report={reportDetails.data} showFullContent={true} />
+            <EnhancedReportCard report={reportDetails.data} />
             {reportDetails.data.wordCloud && (
-              <div className="mt-4">
+              <div className="mt-6">
                 <WordCloud
                   words={reportDetails.data.wordCloud}
                   title="Dönem Kelime Bulutu"

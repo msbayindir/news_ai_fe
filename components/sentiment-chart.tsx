@@ -16,18 +16,19 @@ export function SentimentChart() {
     queryFn: () => analyticsApi.getLatestReport(reportType),
   });
 
-  // Extract sentiment data from report summary using regex
+  // Extract sentiment data from report summary JSON
   const extractSentimentData = (summary: string) => {
-    const jsonRegex =
-      /```json\s*\n?\s*{\s*"positive":\s*(\d+),\s*"negative":\s*(\d+),\s*"nötr":\s*(\d+)\s*}\s*```/;
-    const match = summary?.match(jsonRegex);
-
-    if (match) {
-      return {
-        positive: parseInt(match[1]),
-        negative: parseInt(match[2]),
-        neutral: parseInt(match[3]),
-      };
+    try {
+      const parsed = JSON.parse(summary);
+      if (parsed.statistics) {
+        return {
+          positive: parsed.statistics.positive || 0,
+          negative: parsed.statistics.negative || 0,
+          neutral: parsed.statistics.neutral || 0,
+        };
+      }
+    } catch (error) {
+      console.error('Summary parsing error:', error);
     }
     return null;
   };
@@ -63,17 +64,19 @@ export function SentimentChart() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-gray-800">
-            Haber Duygu Analizi
+      <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-blue-600" />
+            Duygu Analizi
           </h3>
-          <Calendar className="h-4 w-4 text-gray-400" />
+          <div className="w-20 h-6 bg-gray-200 rounded animate-pulse"></div>
         </div>
         <div className="animate-pulse">
-          <div className="h-32 bg-gray-200 rounded mb-3"></div>
-          <div className="space-y-2">
+          <div className="h-40 bg-gray-200 rounded-lg mb-4"></div>
+          <div className="space-y-3">
             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2"></div>
           </div>
         </div>
@@ -83,25 +86,28 @@ export function SentimentChart() {
 
   if (!sentimentData || total === 0) {
     return (
-      <div className="bg-white rounded-lg p-4 shadow-sm border">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-semibold text-gray-800">
-            Haber Duygu Analizi
+      <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-blue-600" />
+            Duygu Analizi
           </h3>
           <select
             value={reportType}
             onChange={(e) =>
               setReportType(e.target.value as "daily" | "weekly" | "monthly")
             }
-            className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black"
+            className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white"
           >
             <option value="daily">Günlük</option>
             <option value="weekly">Haftalık</option>
             <option value="monthly">Aylık</option>
           </select>
         </div>
-        <div className="text-center py-8">
-          <p className="text-gray-500 text-sm">Veri bulunamadı</p>
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <TrendingUp className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500 text-sm">Henüz analiz edilmiş veri bulunmuyor</p>
+          <p className="text-gray-400 text-xs mt-1">Yeni rapor oluşturmayı deneyin</p>
         </div>
       </div>
     );
