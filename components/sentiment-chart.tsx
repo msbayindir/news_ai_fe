@@ -7,7 +7,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { TrendingUp, TrendingDown, Minus, Calendar } from "lucide-react";
 
 export function SentimentChart() {
-  const [reportType, setReportType] = useState<"daily" | "weekly" | "monthly">(
+  const [reportType, setReportType] = useState<"weekly" | "monthly">(
     "weekly"
   );
 
@@ -49,10 +49,8 @@ export function SentimentChart() {
     ? sentimentData.positive + sentimentData.negative + sentimentData.neutral
     : 0;
 
-  const getReportTypeLabel = (type: "daily" | "weekly" | "monthly") => {
+  const getReportTypeLabel = (type: "weekly" | "monthly") => {
     switch (type) {
-      case "daily":
-        return "Günlük";
       case "weekly":
         return "Haftalık";
       case "monthly":
@@ -95,7 +93,7 @@ export function SentimentChart() {
           <select
             value={reportType}
             onChange={(e) =>
-              setReportType(e.target.value as "daily" | "weekly" | "monthly")
+              setReportType(e.target.value as "weekly" | "monthly")
             }
             className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white"
           >
@@ -126,11 +124,10 @@ export function SentimentChart() {
         <select
           value={reportType}
           onChange={(e) =>
-            setReportType(e.target.value as "daily" | "weekly" | "monthly")
+            setReportType(e.target.value as "weekly" | "monthly")
           }
           className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black ml-1"
         >
-          <option value="daily">Günlük</option>
           <option value="weekly">Haftalık</option>
           <option value="monthly">Aylık</option>
         </select>
