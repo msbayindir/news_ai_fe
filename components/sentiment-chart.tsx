@@ -7,9 +7,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { TrendingUp, TrendingDown, Minus, Calendar } from "lucide-react";
 
 export function SentimentChart() {
-  const [reportType, setReportType] = useState<"weekly" | "monthly">(
-    "weekly"
-  );
+  const [reportType, setReportType] = useState<"weekly" | "monthly">("weekly");
 
   const { data: reportData, isLoading } = useQuery({
     queryKey: ["latest-report", reportType],
