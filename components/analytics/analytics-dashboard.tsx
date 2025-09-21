@@ -22,12 +22,18 @@ export function AnalyticsDashboard() {
   const { data: latestReport, isLoading: reportLoading } = useQuery({
     queryKey: ["latestReport", selectedReportType],
     queryFn: () => analyticsApi.getLatestReport(selectedReportType),
+    staleTime: 0, // Production için cache'i hemen stale yap
+    gcTime: 1000 * 60 * 5, // 5 dakika garbage collection
+    refetchOnWindowFocus: true, // Production'da window focus'ta refetch
+    refetchOnMount: true, // Mount'ta her zaman refetch
   });
 
   // Fetch report history
   const { isLoading: historyLoading } = useQuery({
     queryKey: ["reportHistory", selectedReportType],
     queryFn: () => analyticsApi.getReportHistory(selectedReportType, 10),
+    staleTime: 1000 * 60 * 2, // 2 dakika fresh
+    gcTime: 1000 * 60 * 10, // 10 dakika garbage collection
   });
 
   // Fetch specific report details
@@ -42,9 +48,18 @@ export function AnalyticsDashboard() {
   const generateReportMutation = useMutation({
     mutationFn: (type: "daily" | "weekly" | "monthly") =>
       analyticsApi.generateReport(type),
-    onSuccess: () => {
+    onSuccess: async () => {
+      // 1. Cache'leri invalidate et
       queryClient.invalidateQueries({ queryKey: ["latestReport"] });
       queryClient.invalidateQueries({ queryKey: ["reportHistory"] });
+      
+      // 2. Production için force refetch - anında UI güncelleme
+      await queryClient.refetchQueries({ 
+        queryKey: ["latestReport", selectedReportType] 
+      });
+      await queryClient.refetchQueries({ 
+        queryKey: ["reportHistory", selectedReportType] 
+      });
     },
   });
 
