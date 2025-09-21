@@ -16,11 +16,16 @@ export function AnalyticsDashboard() {
     "daily" | "weekly" | "monthly"
   >("daily");
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0); // Manual refresh için
   const queryClient = useQueryClient();
 
   // Fetch latest report
-  const { data: latestReport, isLoading: reportLoading } = useQuery({
-    queryKey: ["latestReport", selectedReportType],
+  const {
+    data: latestReport,
+    isLoading: reportLoading,
+    refetch: refetchLatest,
+  } = useQuery({
+    queryKey: ["latestReport", selectedReportType, refreshKey],
     queryFn: () => analyticsApi.getLatestReport(selectedReportType),
     staleTime: 0, // Production için cache'i hemen stale yap
     gcTime: 1000 * 60 * 5, // 5 dakika garbage collection
@@ -48,22 +53,37 @@ export function AnalyticsDashboard() {
   const generateReportMutation = useMutation({
     mutationFn: (type: "daily" | "weekly" | "monthly") =>
       analyticsApi.generateReport(type),
-    onSuccess: async () => {
-      // 1. Cache'leri invalidate et
-      queryClient.invalidateQueries({ queryKey: ["latestReport"] });
-      queryClient.invalidateQueries({ queryKey: ["reportHistory"] });
-      
-      // 2. Production için force refetch - anında UI güncelleme
-      await queryClient.refetchQueries({ 
-        queryKey: ["latestReport", selectedReportType] 
-      });
-      await queryClient.refetchQueries({ 
-        queryKey: ["reportHistory", selectedReportType] 
-      });
+    onSuccess: async (data, variables) => {
+      // variables = generate edilen rapor türü
+      const reportType = variables;
+
+      console.log("🚀 Report generated successfully for:", reportType);
+
+      // 1. Refresh key'i değiştir - bu query'i yeniden çalıştırır
+      setRefreshKey((prev) => prev + 1);
+
+      // 2. Manuel refetch de tetikle
+      setTimeout(() => {
+        refetchLatest();
+      }, 500);
+
+      console.log("✅ Manual refresh triggered");
+    },
+    onError: (error) => {
+      console.error("❌ Report generation failed:", error);
     },
   });
 
-  const handleGenerateReport = (type: "daily" | "weekly" | "monthly") => {
+  const handleGenerateReport = async (type: "daily" | "weekly" | "monthly") => {
+    console.log("🎯 Generating report for type:", type);
+    console.log("🎯 Current selectedReportType:", selectedReportType);
+
+    // Eğer farklı bir tip seçilmişse, önce onu güncelle
+    if (type !== selectedReportType) {
+      setSelectedReportType(type);
+      console.log("🔄 Report type updated to:", type);
+    }
+
     generateReportMutation.mutate(type);
   };
 
