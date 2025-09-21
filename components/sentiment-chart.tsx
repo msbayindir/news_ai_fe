@@ -28,7 +28,7 @@ export function SentimentChart() {
         };
       }
     } catch (error) {
-      console.error('Summary parsing error:', error);
+      console.error("Summary parsing error:", error);
     }
     return null;
   };
@@ -106,8 +106,12 @@ export function SentimentChart() {
         </div>
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <TrendingUp className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">Henüz analiz edilmiş veri bulunmuyor</p>
-          <p className="text-gray-400 text-xs mt-1">Yeni rapor oluşturmayı deneyin</p>
+          <p className="text-gray-500 text-sm">
+            Henüz analiz edilmiş veri bulunmuyor
+          </p>
+          <p className="text-gray-400 text-xs mt-1">
+            Yeni rapor oluşturmayı deneyin
+          </p>
         </div>
       </div>
     );
